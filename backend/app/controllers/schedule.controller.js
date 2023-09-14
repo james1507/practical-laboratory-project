@@ -8,9 +8,17 @@ exports.allAccess = (req, res) => {
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
   try {
-    const schedule = new Schedule(req.body);
-    const savedSchedule = await schedule.save();
-    res.status(201).json(savedSchedule);
+    // Extract the custom Id field from the request body
+    const { Id, Subject, StartTime, EndTime } = req.body;
+
+    // Create a new schedule document with the custom Id
+    const schedule = new Schedule({ Id, Subject, StartTime, EndTime });
+
+    // Save the schedule document without an _id field
+    await schedule.save();
+    
+    // Return the response with the custom Id field
+    res.status(201).json({ Id, Subject, StartTime, EndTime });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -19,7 +27,8 @@ exports.createSchedule = async (req, res) => {
 // Retrieve all schedules
 exports.getAllSchedules = async (req, res) => {
   try {
-    const schedules = await Schedule.find();
+
+    const schedules = await Schedule.find({}, { _id: 0 });
     res.status(200).json(schedules);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -9,7 +9,7 @@ module.exports = function (app) {
   });
 
   // Create a new schedule
-  router.post("/api/schedules", scheduleController.createSchedule);
+  app.post("/api/schedules", scheduleController.createSchedule);
 
   app.get("/api/test/all", controller.allAccess);
 
