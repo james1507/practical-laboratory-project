@@ -1,14 +1,15 @@
 const { authJwt } = require("../middlewares");
 const controller = require("../controllers/user.controller");
+const scheduleController = require("../controllers/schedule.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, Content-Type, Accept"
-    );
+module.exports = function (app) {
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
+
+  // Create a new schedule
+  router.post("/api/schedules", scheduleController.createSchedule);
 
   app.get("/api/test/all", controller.allAccess);
 
