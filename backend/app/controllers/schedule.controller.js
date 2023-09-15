@@ -1,5 +1,5 @@
 // schedule.controller.js
-const Schedule = require('../models/schedule.model');
+const Schedule = require("../models/schedule.model");
 
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
@@ -16,7 +16,7 @@ exports.createSchedule = async (req, res) => {
 
     // Save the schedule document without an _id field
     await schedule.save();
-    
+
     // Return the response with the custom Id field
     res.status(201).json({ Id, Subject, StartTime, EndTime });
   } catch (error) {
@@ -27,7 +27,6 @@ exports.createSchedule = async (req, res) => {
 // Retrieve all schedules
 exports.getAllSchedules = async (req, res) => {
   try {
-
     const schedules = await Schedule.find({}, { _id: 0 });
     res.status(200).json(schedules);
   } catch (error) {
@@ -40,7 +39,7 @@ exports.getScheduleById = async (req, res) => {
   try {
     const schedule = await Schedule.findById(req.params.id);
     if (!schedule) {
-      return res.status(404).json({ message: 'Schedule not found' });
+      return res.status(404).json({ message: "Schedule not found" });
     }
     res.status(200).json(schedule);
   } catch (error) {
@@ -51,13 +50,13 @@ exports.getScheduleById = async (req, res) => {
 // Update a schedule by ID
 exports.updateSchedule = async (req, res) => {
   try {
-    const updatedSchedule = await Schedule.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+    const updatedSchedule = await Schedule.findOneAndUpdate(
+      { Id: req.params.id }, // Find the schedule by its custom Id
+      req.body, // Update with the provided data
       { new: true }
     );
     if (!updatedSchedule) {
-      return res.status(404).json({ message: 'Schedule not found' });
+      return res.status(404).json({ message: "Schedule not found" });
     }
     res.status(200).json(updatedSchedule);
   } catch (error) {
@@ -68,11 +67,13 @@ exports.updateSchedule = async (req, res) => {
 // Delete a schedule by ID
 exports.deleteSchedule = async (req, res) => {
   try {
-    const deletedSchedule = await Schedule.findByIdAndDelete(req.params.id);
+    const deletedSchedule = await Schedule.findOneAndDelete({
+      Id: req.params.id,
+    });
     if (!deletedSchedule) {
-      return res.status(404).json({ message: 'Schedule not found' });
+      return res.status(404).json({ message: "Schedule not found" });
     }
-    res.status(204).send();
+    res.status(204).json({ message: "Schedule deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
