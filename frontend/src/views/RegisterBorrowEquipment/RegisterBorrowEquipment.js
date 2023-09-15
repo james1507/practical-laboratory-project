@@ -13,13 +13,10 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 
-const Profile = () => {
-  const title = "Thông tin cá nhân";
-  const message = "Đây là trang thông tin cá nhân, hãy điền thông tin";
-
+const RegisterBorrowEquipment = () => {
   return (
     <>
-      <UserHeader titleHeader={title} messageHeader={message} />
+      <UserHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -310,4 +307,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default RegisterBorrowEquipment;

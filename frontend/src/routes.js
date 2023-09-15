@@ -19,6 +19,8 @@ import Index from "views/Home/Index.js";
 import Profile from "views/Profile/Profile.js";
 import Register from "views/Register/Register.js";
 import Login from "views/Login/Login.js";
+import RegisterPracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom";
+import RegisterBorrowEquipment from "views/RegisterBorrowEquipment/RegisterBorrowEquipment";
 
 var routes = [
   {
@@ -26,6 +28,20 @@ var routes = [
     name: "Trang chủ",
     icon: "ni ni-tv-2 text-primary",
     component: <Index />,
+    layout: "/admin",
+  },
+  {
+    path: "/user-register-practice-room",
+    name: "Đăng ký phòng thực hành",
+    icon: "ni ni-single-02 text-yellow",
+    component: <RegisterPracticeRoom />,
+    layout: "/admin",
+  },
+  {
+    path: "/user-register-borrow-equipment",
+    name: "Đăng ký mượn thiết bị",
+    icon: "ni ni-single-02 text-yellow",
+    component: <RegisterBorrowEquipment />,
     layout: "/admin",
   },
   {
