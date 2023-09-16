@@ -8,19 +8,53 @@ exports.allAccess = (req, res) => {
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
   try {
-    // Extract the custom Id field from the request body
-    const { Id, Subject, StartTime, EndTime } = req.body;
+    const { Id, IdUser, Subject, StartTime, EndTime, Description } = req.body;
 
-    // Create a new schedule document with the custom Id
-    const schedule = new Schedule({ Id, Subject, StartTime, EndTime });
-
-    // Save the schedule document without an _id field
+    const schedule = new Schedule({
+      Id,
+      IdUser,
+      Subject,
+      StartTime,
+      EndTime,
+      Description,
+    });
     await schedule.save();
 
-    // Return the response with the custom Id field
-    res.status(201).json({ Id, Subject, StartTime, EndTime });
+    res
+      .status(201)
+      .json({ Id, IdUser, Subject, StartTime, EndTime, Description });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getAllSchedulesByUser = async (req, res) => {
+  try {
+    const { IdUser } = req.query;
+    const schedules = await Schedule.find(
+      { IdUser },
+      {
+        _id: 0,
+        Id: "$_id",
+        Subject: 1,
+        StartTime: 1,
+        EndTime: 1,
+        Description: 1,
+      }
+    );
+
+    // Transform the _id field to Id in each schedule object
+    const transformedSchedules = schedules.map((schedule) => ({
+      Id: schedule.Id,
+      Subject: schedule.Subject,
+      StartTime: schedule.StartTime,
+      EndTime: schedule.EndTime,
+      Description: schedule.Description,
+    }));
+
+    res.status(200).json(transformedSchedules);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 

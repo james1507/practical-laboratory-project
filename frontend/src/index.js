@@ -20,6 +20,7 @@ import * as n3 from "../node_modules/cldr-data/main/vi/numbers.json";
 import * as n4 from "../node_modules/cldr-data/main/vi/ca-gregorian.json";
 import * as s from "../node_modules/cldr-data/supplemental/currencyData.json";
 import * as s2 from "../node_modules/cldr-data/supplemental/numberingSystems.json";
+import { useSelector } from "react-redux";
 
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NGaF1cXGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWXZeeHRWR2hcU0Z/VkA="
@@ -44,14 +45,33 @@ L10n.load({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <Provider store={store}>
+const App = () => {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth/*" element={<AuthLayout />} />
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="*" element={<Navigate to="/admin/index" replace />} />
+        {isLoggedIn ? (
+          <Route path="/admin/*" element={<AdminLayout />} />
+        ) : (
+          <Route path="/auth/*" element={<AuthLayout />} />
+        )}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={isLoggedIn ? "/admin/index" : "/auth/login"}
+              replace
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
+  );
+};
+
+root.render(
+  <Provider store={store}>
+    <App />
   </Provider>
 );

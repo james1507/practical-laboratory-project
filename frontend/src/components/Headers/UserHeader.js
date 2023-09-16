@@ -1,7 +1,7 @@
 import { Button, Container, Row, Col } from "reactstrap";
 
 const UserHeader = (props) => {
-  const { titleHeader, messageHeader } = props;
+  const { titleHeader, messageHeader, imageCover } = props;
 
   return (
     <>
@@ -10,7 +10,7 @@ const UserHeader = (props) => {
         style={{
           minHeight: "600px",
           backgroundImage:
-            "url(" + require("../../assets/img/theme/profile-cover.jpg") + ")",
+            "url(" + require("../../assets/img/theme/" + imageCover) + ")",
           backgroundSize: "cover",
           backgroundPosition: "center top",
         }}

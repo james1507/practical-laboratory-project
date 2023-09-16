@@ -12,61 +12,11 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { useState } from "react";
-import { useSelector } from "react-redux";
 
-const Profile = () => {
-  const title = "Thông tin cá nhân";
-  const message = "Đây là trang thông tin cá nhân, hãy điền thông tin";
-  const imageName = "profile-cover.jpg";
-
-  const fullName = useSelector((state) => state.auth.fullName);
-  const age = useSelector((state) => state.auth.age);
-  const collage = useSelector((state) => state.auth.collage);
-  const position = useSelector((state) => state.auth.position);
-  const major = useSelector((state) => state.auth.major);
-  const yearExp = useSelector((state) => state.auth.yearExp);
-  const aboutMe = useSelector((state) => state.auth.aboutMe);
-  const imageUrl = useSelector((state) => state.auth.imageUrl);
-
-  const [profileData, setProfileData] = useState({
-    fullName: "Jessica Jones",
-    age: "27",
-    collage: "University of Computer Science",
-    position: "Solution Manager - Creative Tim Officer",
-    major: "",
-    yearExp: "",
-    aboutMe: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
-      [name]: value,
-    });
-  };
-
-  const handleProfileUpdate = () => {
-    // Send a PUT request to update the profile with profileData
-    fetch("http://localhost:8000/api/auth/update-profile", {
-      // Replace with your API URL
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profileData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data); // Handle the response as needed
-        // You can also show a success message or perform other actions here
-      })
-      .catch((error) => {
-        console.error("Error updating profile:", error);
-        // Handle errors here
-      });
-  };
+const RegisterBorrowEquipment1 = () => {
+  const title = "Đăng ký mượn thiết bị";
+  const message = "Đây là trang đăng ký mượn thiết bị, hãy điền thông tin";
+  const imageName = "equipment_computer.png";
 
   return (
     <>
@@ -87,21 +37,57 @@ const Profile = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={imageUrl} 
+                        src={require("../../assets/img/theme/team-4-800x800.jpg")}
                       />
                     </a>
                   </div>
                 </Col>
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                <div className="d-flex justify-content-between"></div>
+                <div className="d-flex justify-content-between">
+                  <Button
+                    className="mr-4"
+                    color="info"
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                    size="sm"
+                  >
+                    Connect
+                  </Button>
+                  <Button
+                    className="float-right"
+                    color="default"
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                    size="sm"
+                  >
+                    Message
+                  </Button>
+                </div>
               </CardHeader>
               <CardBody className="pt-0 pt-md-4">
-                <div className="card-profile-stats d-flex justify-content-center mt-md-5"></div>
+                <Row>
+                  <div className="col">
+                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+                      <div>
+                        <span className="heading">22</span>
+                        <span className="description">Friends</span>
+                      </div>
+                      <div>
+                        <span className="heading">10</span>
+                        <span className="description">Photos</span>
+                      </div>
+                      <div>
+                        <span className="heading">89</span>
+                        <span className="description">Comments</span>
+                      </div>
+                    </div>
+                  </div>
+                </Row>
                 <div className="text-center">
                   <h3>
-                    {fullName}
-                    <span className="font-weight-light">, {age}</span>
+                    Jessica Jones
+                    <span className="font-weight-light">, 27</span>
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
@@ -109,14 +95,21 @@ const Profile = () => {
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    {major}
+                    Solution Manager - Creative Tim Officer
                   </div>
                   <div>
                     <i className="ni education_hat mr-2" />
-                    {collage}
+                    University of Computer Science
                   </div>
                   <hr className="my-4" />
-                  <p>{aboutMe}</p>
+                  <p>
+                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
+                    Nick Murphy — writes, performs and records all of his own
+                    music.
+                  </p>
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    Show more
+                  </a>
                 </div>
               </CardBody>
             </Card>
@@ -126,14 +119,24 @@ const Profile = () => {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Cập nhật tài khoản</h3>
+                    <h3 className="mb-0">My account</h3>
+                  </Col>
+                  <Col className="text-right" xs="4">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                      size="sm"
+                    >
+                      Settings
+                    </Button>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form>
                   <h6 className="heading-small text-muted mb-4">
-                    Thông tin người dùng
+                    User information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
@@ -143,11 +146,11 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-username"
                           >
-                            Tài khoản
+                            Username
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue="lucky.jesse"
                             id="input-username"
                             placeholder="Username"
                             type="text"
@@ -160,12 +163,12 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-email"
                           >
-                            Địa chỉ email
+                            Email address
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="nam@example.com"
+                            placeholder="jesse@example.com"
                             type="email"
                           />
                         </FormGroup>
@@ -178,13 +181,13 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-first-name"
                           >
-                            Tên
+                            First name
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue="Lucky"
                             id="input-first-name"
-                            placeholder="Name"
+                            placeholder="First name"
                             type="text"
                           />
                         </FormGroup>
@@ -193,15 +196,15 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-first-name"
+                            htmlFor="input-last-name"
                           >
-                            Tuổi
+                            Last name
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
-                            id="input-first-name"
-                            placeholder="Age"
+                            defaultValue="Jesse"
+                            id="input-last-name"
+                            placeholder="Last name"
                             type="text"
                           />
                         </FormGroup>
@@ -211,7 +214,7 @@ const Profile = () => {
                   <hr className="my-4" />
                   {/* Address */}
                   <h6 className="heading-small text-muted mb-4">
-                    Thông tin liên lạc
+                    Contact information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
@@ -221,13 +224,13 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-address"
                           >
-                            Trường công tác
+                            Address
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                             id="input-address"
-                            placeholder="Collage Name"
+                            placeholder="Home Address"
                             type="text"
                           />
                         </FormGroup>
@@ -240,13 +243,13 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-city"
                           >
-                            Chức vụ
+                            City
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue="New York"
                             id="input-city"
-                            placeholder="Position"
+                            placeholder="City"
                             type="text"
                           />
                         </FormGroup>
@@ -257,13 +260,13 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Chuyên ngành
+                            Country
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue="United States"
                             id="input-country"
-                            placeholder="Major"
+                            placeholder="Country"
                             type="text"
                           />
                         </FormGroup>
@@ -274,12 +277,12 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Số năm kinh nghiệm
+                            Postal code
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-postal-code"
-                            placeholder="Number Exp"
+                            placeholder="Postal code"
                             type="number"
                           />
                         </FormGroup>
@@ -288,31 +291,20 @@ const Profile = () => {
                   </div>
                   <hr className="my-4" />
                   {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Giới thiệu về tôi
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">About me</h6>
                   <div className="pl-lg-4">
                     <FormGroup>
-                      <label>Về tôi</label>
+                      <label>About Me</label>
                       <Input
                         className="form-control-alternative"
                         placeholder="A few words about you ..."
                         rows="4"
-                        defaultValue=""
+                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
+                        Open Source."
                         type="textarea"
                       />
                     </FormGroup>
                   </div>
-                  <Col xs="12" className="text-center">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={() => handleProfileUpdate}
-                      size="lg"
-                    >
-                      Cập nhật
-                    </Button>
-                  </Col>
                 </Form>
               </CardBody>
             </Card>
@@ -323,4 +315,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default RegisterBorrowEquipment1;

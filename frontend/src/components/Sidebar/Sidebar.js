@@ -25,8 +25,15 @@ import {
   Col,
   NavbarBrand,
 } from "reactstrap";
+import { useSelector } from "react-redux";
 
 const Sidebar = (props) => {
+  const roles = useSelector((state) => state.auth.roles);
+
+  const hasRequiredRole = roles.some(
+    (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
+  );
+
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
 
@@ -41,7 +48,10 @@ const Sidebar = (props) => {
   const createLinks = (routes) => {
     // Filter the routes to exclude "/login" and "/register"
     const filteredRoutes = routes.filter(
-      (prop) => prop.path !== "/login" && prop.path !== "/register"
+      (prop) =>
+        prop.path !== "/login" &&
+        prop.path !== "/register" &&
+        hasRequiredRole !== prop.isAdminOrModerator
     );
 
     return filteredRoutes.map((prop, key) => {

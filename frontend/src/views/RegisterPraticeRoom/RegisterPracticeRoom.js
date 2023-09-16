@@ -16,10 +16,15 @@ import UserHeader from "components/Headers/UserHeader.js";
 const RegisterPracticeRoom = () => {
   const title = "Đăng ký phòng thực hành";
   const message = "Đây là trang đăng ký phòng thực hành, hãy điền thông tin";
+  const imageName = "pratice_room.png";
 
   return (
     <>
-      <UserHeader titleHeader={title} messageHeader={message} />
+      <UserHeader
+        titleHeader={title}
+        messageHeader={message}
+        imageCover={imageName}
+      />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -29,16 +34,6 @@ const RegisterPracticeRoom = () => {
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">Đăng ký phòng thực hành</h3>
-                  </Col>
-                  <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Đăng ký
-                    </Button>
                   </Col>
                 </Row>
               </CardHeader>
@@ -55,7 +50,7 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-username"
                           >
-                            Tên giảng viên  
+                            Tên giảng viên
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -214,6 +209,16 @@ const RegisterPracticeRoom = () => {
                       />
                     </FormGroup>
                   </div>
+                  <Col xs="12" className="text-center">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                      size="lg"
+                    >
+                      Đăng ký
+                    </Button>
+                  </Col>
                 </Form>
               </CardBody>
             </Card>

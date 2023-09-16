@@ -1,4 +1,19 @@
 import axios from "axios";
+import {
+  setLoggedIn,
+  setId,
+  setEmail,
+  setUsername,
+  setRoles,
+  setFullName,
+  setAge,
+  setCollage,
+  setPosition,
+  setMajor,
+  setYearExp,
+  setAboutMe,
+  setImageUrl,
+} from "../../redux/Auth/AuthSlice";
 
 const handleSignIn = async (
   formData,
@@ -27,8 +42,23 @@ const handleSignIn = async (
     );
 
     if (response.status === 200) {
+      dispatch(setLoggedIn(true));
+      dispatch(setId(response.data.id));
+      dispatch(setUsername(response.data.username));
+      dispatch(setEmail(response.data.email));
+      dispatch(setRoles(response.data.roles));
+      dispatch(setFullName(response.data.fullName));
+      dispatch(setAge(response.data.age));
+      dispatch(setCollage(response.data.collage));
+      dispatch(setPosition(response.data.position));
+      dispatch(setMajor(response.data.major));
+      dispatch(setYearExp(response.data.yearExp));
+      dispatch(setAboutMe(response.data.aboutMe));
+      dispatch(setImageUrl(response.data.imageUrl));
       navigate("/index");
       setLoading(false);
+
+      console.log(response.data.roles);
     } else {
       setError("An error occurred during login.");
       setLoading(false);

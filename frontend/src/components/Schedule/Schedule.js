@@ -9,6 +9,7 @@ import {
   Agenda,
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState([]);
@@ -22,15 +23,31 @@ const Schedule = () => {
     EndTime: new Date(),
   });
 
+  const userId = useSelector((state) => state.auth.id);
+  const roles = useSelector((state) => state.auth.roles);
+
+  const hasRequiredRole = roles.some(
+    (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
+  );
+
+  var url = "";
+
+  if (hasRequiredRole) {
+    url = "http://localhost:8000/api/schedules";
+  } else {
+    url = `http://localhost:8000/api/schedules/user?IdUser=${userId}`;
+  }
+
   useEffect(() => {
     fetchScheduleData();
   }, []);
 
   const fetchScheduleData = () => {
     axios
-      .get("http://localhost:8000/api/schedules")
+      .get(url)
       .then((response) => {
         setScheduleData(response.data);
+        console.log(response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

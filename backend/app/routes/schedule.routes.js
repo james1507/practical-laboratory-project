@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const scheduleController = require("../controllers/schedule.controller");
 const controller = require("../controllers/user.controller");
+const { authJwt } = require("../middlewares");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -17,6 +18,8 @@ module.exports = function (app) {
 
   // Retrieve all schedules
   app.get("/api/schedules", scheduleController.getAllSchedules);
+
+  app.get("/api/schedules/user", scheduleController.getAllSchedulesByUser);
 
   // Retrieve a single schedule by ID
   app.get("/api/schedules/:id", scheduleController.getScheduleById);

@@ -1,11 +1,10 @@
 // store.js
 import { configureStore } from "@reduxjs/toolkit";
-
-import sessionReducer from "./SessionActions/SessionActions.js";
+import authReducer from "./Auth/AuthSlice";
 
 const store = configureStore({
   reducer: {
-    session: sessionReducer,
+    auth: authReducer,
   },
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
 });

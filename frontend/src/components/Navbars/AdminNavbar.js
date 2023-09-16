@@ -35,12 +35,18 @@ import {
 } from "reactstrap";
 
 import { useNavigate } from "react-router-dom";
+import { setLoggedIn } from "../../redux/Auth/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminNavbar = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const email = useSelector((state) => state.auth.email);
 
   function navigateToPage() {
-    navigate("/auth/*"); // Replace '/newpage' with the URL of the page you want to navigate to
+    dispatch(setLoggedIn(false));
+
+    // navigate("/auth/*"); // Replace '/newpage' with the URL of the page you want to navigate to
   }
 
   return (
@@ -76,7 +82,9 @@ const AdminNavbar = (props) => {
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">Nam</span>
+                    <span className="mb-0 text-sm font-weight-bold">
+                      {email}
+                    </span>
                   </Media>
                 </Media>
               </DropdownToggle>

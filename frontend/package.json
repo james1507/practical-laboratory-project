@@ -42,7 +42,7 @@
     "@syncfusion/ej2-react-buttons": "^22.2.9",
     "@syncfusion/ej2-react-schedule": "^22.2.12",
     "axios": "^1.5.0",
-    "bootstrap": "4.6.2",
+    "bootstrap": "^4.6.2",
     "chart.js": "2.9.4",
     "classnames": "2.3.2",
     "cldr-data": "^36.0.1",
@@ -59,7 +59,8 @@
     "react-scripts": "5.0.1",
     "reactstrap": "8.10.0",
     "redux": "^4.2.1",
-    "sass": "1.62.1"
+    "sass": "1.62.1",
+    "uuid": "^9.0.1"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
