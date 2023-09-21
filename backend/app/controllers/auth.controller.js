@@ -6,14 +6,18 @@ const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const moment = require("moment");
 
 async function createUserSchedule(userId) {
   try {
+    const startTime = moment().subtract(5, "hour"); // Set StartTime to 1 hour ago
+    const endTime = moment(); // Set EndTime to the current time
+
     const schedule = new Schedule({
       IdUser: userId,
       Subject: "Default Subject",
-      StartTime: "Default Start Time",
-      EndTime: "Default End Time",
+      StartTime: startTime.toISOString(),
+      EndTime: endTime.toISOString(),
       Description: "Default Description",
     });
 
@@ -30,7 +34,7 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
   });
 
-  user.save((err, user) => {
+  user.save(async (err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -56,8 +60,6 @@ exports.signup = (req, res) => {
 
             console.log("User was registered successfully!");
 
-            await createUserSchedule(user._id);
-
             res.send({ message: "User was registered successfully!" });
           });
         }
@@ -75,6 +77,8 @@ exports.signup = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
+
+          console.log("User was registered successfully!");
 
           res.send({ message: "User was registered successfully!" });
         });

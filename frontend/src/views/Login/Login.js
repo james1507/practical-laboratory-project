@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, NavLink } from "react-router-dom";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { handleSignIn, handleInputChange } from "./LoginLogic.js";
@@ -16,6 +16,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { ToastContainer } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ const Login = () => {
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardBody className="px-lg-5 py-lg-5">
+            <div className="text-center text-muted mb-4">
+              <h1>Đăng nhập</h1>
+            </div>
             <div className="text-center text-muted mb-4"></div>
             <Form role="form">
               <FormGroup className="mb-3">
@@ -76,7 +80,7 @@ const Login = () => {
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="custom-control custom-control-alternative custom-checkbox">
+              {/* <div className="custom-control custom-control-alternative custom-checkbox">
                 <input
                   className="custom-control-input"
                   id=" customCheckLogin"
@@ -88,7 +92,7 @@ const Login = () => {
                 >
                   <span className="text-muted">Ghi nhớ đăng nhập</span>
                 </label>
-              </div>
+              </div> */}
               <div className="text-center">
                 <Button
                   className="my-4"
@@ -122,13 +126,11 @@ const Login = () => {
         <Row className="mt-3">
           <Col xs="6"></Col>
           <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
-              <small>Tạo tài khoản mới</small>
-            </a>
+            <NavLink className="nav-link-icon" to="/auth/register" tag={Link}>
+              <span className="nav-link-inner--text" style={{ color: "white" }}>
+                Tạo tài khoản mới
+              </span>
+            </NavLink>
           </Col>
         </Row>
       </Col>

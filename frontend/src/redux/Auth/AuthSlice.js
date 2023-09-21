@@ -7,6 +7,7 @@ const initialState = {
   username: "",
   email: "",
   isLoggedIn: false,
+  isSignUp: false,
   roles: [],
   fullName: String,
   age: String,
@@ -33,6 +34,9 @@ const authSlice = createSlice({
     },
     setLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
+    },
+    setSignUp: (state, action) => {
+      state.isSignUp = action.payload;
     },
     setRoles: (state, action) => {
       state.roles = action.payload;
@@ -66,6 +70,7 @@ const authSlice = createSlice({
 
 export const {
   setLoggedIn,
+  setSignUp,
   setId,
   setUsername,
   setEmail,

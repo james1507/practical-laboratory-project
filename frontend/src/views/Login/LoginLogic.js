@@ -14,6 +14,7 @@ import {
   setAboutMe,
   setImageUrl,
 } from "../../redux/Auth/AuthSlice";
+import { toast } from "react-toastify";
 
 const handleSignIn = async (
   formData,
@@ -55,19 +56,31 @@ const handleSignIn = async (
       dispatch(setYearExp(response.data.yearExp));
       dispatch(setAboutMe(response.data.aboutMe));
       dispatch(setImageUrl(response.data.imageUrl));
+
+      toast.success("Đăng nhập thành công!", {
+        position: "top-right",
+        autoClose: 3000, // Auto close the notification after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       navigate("/index");
       setLoading(false);
 
       console.log(response.data.roles);
     } else {
-      setError("An error occurred during login.");
+      setError("Có lỗi nào đó trong quá trình đăng nhập.");
       setLoading(false);
     }
   } catch (error) {
-    if (error.response && error.response.data.message === "User Not found.") {
-      setError("User not found. Please check your credentials.");
+    if (
+      error.response &&
+      error.response.data.message === "Không tìm thấy tài khoản."
+    ) {
+      setError("Không tìm thấy tài khoản.");
     } else {
-      setError("An error occurred during login.");
+      setError("Có lỗi trong quá trình đăng nhập.");
     }
   } finally {
     setLoading(false);

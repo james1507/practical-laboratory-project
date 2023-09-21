@@ -10,6 +10,7 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
 
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState([]);
@@ -254,21 +255,33 @@ const Schedule = () => {
               </label>
               <label>
                 Start Time:
-                <input
+                <DateTimePickerComponent
+                  type="datetime-local"
+                  name="StartTime"
+                  value={newEventData.StartTime}
+                  onChange={onFormInputChange}
+                ></DateTimePickerComponent>
+                {/* <input
                   type="datetime-local"
                   name="StartTime"
                   value={newEventData.StartTime.toISOString().slice(0, -8)}
                   onChange={onFormInputChange}
-                />
+                /> */}
               </label>
               <label>
                 End Time:
-                <input
+                <DateTimePickerComponent
+                  type="datetime-local"
+                  name="EndTime"
+                  value={newEventData.EndTime}
+                  onChange={onFormInputChange}
+                ></DateTimePickerComponent>
+                {/* <input
                   type="datetime-local"
                   name="EndTime"
                   value={newEventData.EndTime.toISOString().slice(0, -8)}
                   onChange={onFormInputChange}
-                />
+                /> */}
               </label>
               <button type="submit">Save</button>
             </form>

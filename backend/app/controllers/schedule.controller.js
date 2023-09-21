@@ -34,8 +34,8 @@ exports.getAllSchedulesByUser = async (req, res) => {
     const schedules = await Schedule.find(
       { IdUser },
       {
-        _id: 0,
-        Id: "$_id",
+        _id: 0, // Exclude the default _id field
+        Id: "$_id", // Include the Id field as _id's value
         Subject: 1,
         StartTime: 1,
         EndTime: 1,
