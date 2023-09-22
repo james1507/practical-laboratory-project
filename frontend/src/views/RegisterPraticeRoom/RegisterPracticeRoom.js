@@ -6,17 +6,38 @@ import {
   FormGroup,
   Form,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
   Container,
   Row,
   Col,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import { Dropdown, DropdownButton } from "react-bootstrap";
+import React, { useState } from "react";
+import { useRef } from "react";
+import {
+  DatePickerComponent,
+  DateTimePickerComponent,
+} from "@syncfusion/ej2-react-calendars";
 
 const RegisterPracticeRoom = () => {
   const title = "Đăng ký phòng thực hành";
   const message = "Đây là trang đăng ký phòng thực hành, hãy điền thông tin";
   const imageName = "pratice_room.png";
+
+  const roompRactice = [
+    { label: "Phòng 707", value: 1 },
+    { label: "Phòng 701", value: 2 },
+    { label: "Phòng 703", value: 3 },
+    { label: "Phòng 705", value: 4 },
+  ];
+
+  const [selectedRoom, setSelectedRoom] = useState("");
+
+  const dropdownButtonRef = useRef();
 
   return (
     <>
@@ -44,21 +65,53 @@ const RegisterPracticeRoom = () => {
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Nội dung thực hành
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-address"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
                       <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-username"
                           >
-                            Tên giảng viên
+                            Phòng thực hành
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="lucky.jesse"
-                            id="input-username"
-                            placeholder="Username"
-                            type="text"
-                          />
+                          <InputGroup>
+                            <div ref={dropdownButtonRef}>
+                              <DropdownButton
+                                className="form-control-alternative w-100"
+                                as={InputGroup.Prepend}
+                                title={selectedRoom || "Chọn phòng thực hành"}
+                                variant="outline-secondary"
+                                color="white"
+                                id="dropdown-basic-button"
+                                onSelect={(room) => setSelectedRoom(room)}
+                              >
+                                {roompRactice.map((room) => (
+                                  <Dropdown.Item
+                                    key={room.value}
+                                    eventKey={room.label}
+                                  >
+                                    {room.label}
+                                  </Dropdown.Item>
+                                ))}
+                              </DropdownButton>
+                            </div>
+                          </InputGroup>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -67,14 +120,30 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-email"
                           >
-                            Email address
+                            Giảng viên
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-email"
-                            placeholder="jesse@example.com"
-                            type="email"
-                          />
+                          <InputGroup>
+                            <div ref={dropdownButtonRef}>
+                              <DropdownButton
+                                className="form-control-alternative w-100"
+                                as={InputGroup.Prepend}
+                                title={selectedRoom || "Chọn phòng thực hành"}
+                                variant="outline-secondary"
+                                color="white"
+                                id="dropdown-basic-button"
+                                onSelect={(room) => setSelectedRoom(room)}
+                              >
+                                {roompRactice.map((room) => (
+                                  <Dropdown.Item
+                                    key={room.value}
+                                    eventKey={room.label}
+                                  >
+                                    {room.label}
+                                  </Dropdown.Item>
+                                ))}
+                              </DropdownButton>
+                            </div>
+                          </InputGroup>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -85,15 +154,30 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-first-name"
                           >
-                            First name
+                            Người trực
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Lucky"
-                            id="input-first-name"
-                            placeholder="First name"
-                            type="text"
-                          />
+                          <InputGroup>
+                            <div ref={dropdownButtonRef}>
+                              <DropdownButton
+                                className="form-control-alternative w-100"
+                                as={InputGroup.Prepend}
+                                title={selectedRoom || "Chọn phòng thực hành"}
+                                variant="outline-secondary"
+                                color="white"
+                                id="dropdown-basic-button"
+                                onSelect={(room) => setSelectedRoom(room)}
+                              >
+                                {roompRactice.map((room) => (
+                                  <Dropdown.Item
+                                    key={room.value}
+                                    eventKey={room.label}
+                                  >
+                                    {room.label}
+                                  </Dropdown.Item>
+                                ))}
+                              </DropdownButton>
+                            </div>
+                          </InputGroup>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -102,10 +186,10 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-last-name"
                           >
-                            Last name
+                            Số lượng sinh viên
                           </label>
                           <Input
-                            className="form-control-alternative"
+                            className="form-control-alternative w-50"
                             defaultValue="Jesse"
                             id="input-last-name"
                             placeholder="Last name"
@@ -115,31 +199,8 @@ const RegisterPracticeRoom = () => {
                       </Col>
                     </Row>
                   </div>
-                  <hr className="my-4" />
                   {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
                   <div className="pl-lg-4">
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
                     <Row>
                       <Col lg="4">
                         <FormGroup>
@@ -147,15 +208,30 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-city"
                           >
-                            City
+                            Môn học
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="New York"
-                            id="input-city"
-                            placeholder="City"
-                            type="text"
-                          />
+                          <InputGroup>
+                            <div ref={dropdownButtonRef}>
+                              <DropdownButton
+                                className="form-control-alternative w-100"
+                                as={InputGroup.Prepend}
+                                title={selectedRoom || "Chọn phòng thực hành"}
+                                variant="outline-secondary"
+                                color="white"
+                                id="dropdown-basic-button"
+                                onSelect={(room) => setSelectedRoom(room)}
+                              >
+                                {roompRactice.map((room) => (
+                                  <Dropdown.Item
+                                    key={room.value}
+                                    eventKey={room.label}
+                                  >
+                                    {room.label}
+                                  </Dropdown.Item>
+                                ))}
+                              </DropdownButton>
+                            </div>
+                          </InputGroup>
                         </FormGroup>
                       </Col>
                       <Col lg="4">
@@ -164,15 +240,9 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Country
+                            Thời gian bắt đầu
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="United States"
-                            id="input-country"
-                            placeholder="Country"
-                            type="text"
-                          />
+                          <DateTimePickerComponent></DateTimePickerComponent>
                         </FormGroup>
                       </Col>
                       <Col lg="4">
@@ -181,30 +251,19 @@ const RegisterPracticeRoom = () => {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Postal code
+                            Thời gian kết thúc
                           </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
-                          />
+                          <DateTimePickerComponent></DateTimePickerComponent>
                         </FormGroup>
                       </Col>
                     </Row>
                   </div>
-                  <hr className="my-4" />
-                  {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">About me</h6>
                   <div className="pl-lg-4">
                     <FormGroup>
-                      <label>About Me</label>
+                      <label>Chi tiết</label>
                       <Input
                         className="form-control-alternative"
-                        placeholder="A few words about you ..."
                         rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                        Open Source."
                         type="textarea"
                       />
                     </FormGroup>

@@ -15,7 +15,7 @@ var routes = [
   },
   {
     path: "/user-register-practice-room",
-    name: "Đăng ký phòng thực hành",
+    name: "Cập nhật thông tin",
     icon: "ni ni-laptop text-yellow",
     component: <RegisterPracticeRoom />,
     layout: "/admin",
@@ -23,7 +23,7 @@ var routes = [
   },
   {
     path: "/user-register-practice-room",
-    name: "Phòng thực hành",
+    name: "Đăng ký phòng thực hành",
     icon: "ni ni-laptop text-yellow",
     component: <RegisterPracticeRoom />,
     layout: "/admin",
