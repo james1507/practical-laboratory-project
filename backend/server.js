@@ -4,7 +4,12 @@ const cookieSession = require("cookie-session");
 
 const dbConfig = require("./app/config/db.config");
 
+
+
 const app = express();
+
+app.use(express.static('dist'));
+
 
 app.use(cors());
 /* for Angular Client (withCredentials) */
@@ -59,6 +64,7 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/schedule.routes")(app);
+require("./app/routes/practice_room.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8000;

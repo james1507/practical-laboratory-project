@@ -190,9 +190,7 @@ const RegisterPracticeRoom = () => {
                           </label>
                           <Input
                             className="form-control-alternative w-50"
-                            defaultValue="Jesse"
                             id="input-last-name"
-                            placeholder="Last name"
                             type="text"
                           />
                         </FormGroup>
