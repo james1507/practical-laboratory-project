@@ -34,6 +34,8 @@ const Sidebar = (props) => {
     (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
   );
 
+  const isAdmin = roles.some((role) => role === "ROLE_ADMIN");
+
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
 
@@ -51,7 +53,8 @@ const Sidebar = (props) => {
       (prop) =>
         prop.path !== "/login" &&
         prop.path !== "/register" &&
-        hasRequiredRole !== prop.isAdminOrModerator
+        hasRequiredRole !== prop.isAdminOrModerator &&
+        isAdmin !== prop.isAdmin
     );
 
     return filteredRoutes.map((prop, key) => {

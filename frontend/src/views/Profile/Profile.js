@@ -14,57 +14,78 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Profile = () => {
   const title = "Thông tin cá nhân";
   const message = "Đây là trang thông tin cá nhân, hãy điền thông tin";
   const imageName = "profile-cover.jpg";
 
-  const fullName = useSelector((state) => state.auth.fullName);
-  const age = useSelector((state) => state.auth.age);
-  const collage = useSelector((state) => state.auth.collage);
-  const position = useSelector((state) => state.auth.position);
-  const major = useSelector((state) => state.auth.major);
-  const yearExp = useSelector((state) => state.auth.yearExp);
-  const aboutMe = useSelector((state) => state.auth.aboutMe);
-  const imageUrl = useSelector((state) => state.auth.imageUrl);
+  const userId = useSelector((state) => state.auth.id);
 
-  const [profileData, setProfileData] = useState({
-    fullName: "Jessica Jones",
-    age: "27",
-    collage: "University of Computer Science",
-    position: "Solution Manager - Creative Tim Officer",
-    major: "",
-    yearExp: "",
-    aboutMe: "",
-  });
+  const [fetchProfileData, setfetchProfileData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
-      [name]: value,
-    });
-  };
-
-  const handleProfileUpdate = () => {
-    // Send a PUT request to update the profile with profileData
-    fetch("http://localhost:8000/api/auth/update-profile", {
-      // Replace with your API URL
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profileData),
-    })
-      .then((response) => response.json())
+  useEffect(() => {
+    // Fetch data from the API
+    setIsLoading(true);
+    fetch(`http://localhost:8000/api/accounts/user/${userId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log(data); // Handle the response as needed
-        // You can also show a success message or perform other actions here
+        setfetchProfileData(data);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error updating profile:", error);
-        // Handle errors here
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      });
+  }, [userId]);
+
+  const clearSuccessMessage = () => {
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 2000); // 5000 milliseconds = 5 seconds
+  };
+  const handleUpdateInfo = () => {
+    const formData = {
+      fullName: document.getElementById("input-full-name").value,
+      age: document.getElementById("input-age").value,
+      collage: document.getElementById("input-collage").value,
+      position: document.getElementById("input-position").value,
+      major: document.getElementById("input-major-user").value,
+      yearExp: document.getElementById("input-year-exp").value.toString(),
+      aboutMe: document.getElementById("input-about-me").value,
+      imageUrl:
+        "https://scontent.fhan14-4.fna.fbcdn.net/v/t39.30808-6/373674583_2143659479298589_151351544226033364_n.jpg?stp=cp6_dst-jpg&_nc_cat=102&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=7t1ebZ8bGFgAX_JeOZR&_nc_ht=scontent.fhan14-4.fna&_nc_e2o=f&oh=00_AfCRi15tknZn69T8kY5cnWCvQSQlde8bLsbQSsrP_X6cVQ&oe=6513245E",
+    };
+
+    axios
+      .put(
+        `http://localhost:8000/api/auth/update-profile/${userId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        // If the request is successful, set the success message
+        setSuccessMessage("Data created successfully!");
+        clearSuccessMessage();
+      })
+      .catch((error) => {
+        // If there's an error, handle it and display an error message
+        console.error("Error creating data:", error);
+        setSuccessMessage("Error creating data. Please try again.");
+        clearSuccessMessage();
       });
   };
 
@@ -76,6 +97,7 @@ const Profile = () => {
         imageCover={imageName}
       />
       {/* Page content */}
+
       <Container className="mt--7" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
@@ -87,7 +109,7 @@ const Profile = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={imageUrl} 
+                        src={isLoading ? "" : fetchProfileData.imageUrl}
                       />
                     </a>
                   </div>
@@ -100,23 +122,21 @@ const Profile = () => {
                 <div className="card-profile-stats d-flex justify-content-center mt-md-5"></div>
                 <div className="text-center">
                   <h3>
-                    {fullName}
-                    <span className="font-weight-light">, {age}</span>
+                    {isLoading ? "" : fetchProfileData.fullName}
+                    <span className="font-weight-light">
+                      , {isLoading ? "" : fetchProfileData.age}
+                    </span>
                   </h3>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
-                  </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    {major}
+                    {isLoading ? "" : fetchProfileData.major}
                   </div>
                   <div>
                     <i className="ni education_hat mr-2" />
-                    {collage}
+                    {isLoading ? "" : fetchProfileData.collage}
                   </div>
                   <hr className="my-4" />
-                  <p>{aboutMe}</p>
+                  <p>{isLoading ? "" : fetchProfileData.aboutMe}</p>
                 </div>
               </CardBody>
             </Card>
@@ -147,10 +167,12 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue=""
+                            defaultValue={
+                              isLoading ? "" : fetchProfileData.username
+                            }
                             id="input-username"
-                            placeholder="Username"
                             type="text"
+                            disabled
                           />
                         </FormGroup>
                       </Col>
@@ -164,9 +186,12 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
+                            defaultValue={
+                              isLoading ? "" : fetchProfileData.email
+                            }
                             id="input-email"
-                            placeholder="nam@example.com"
                             type="email"
+                            disabled
                           />
                         </FormGroup>
                       </Col>
@@ -176,14 +201,14 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-first-name"
+                            htmlFor="input-full-name"
                           >
                             Tên
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue=""
-                            id="input-first-name"
+                            id="input-full-name"
                             placeholder="Name"
                             type="text"
                           />
@@ -193,14 +218,14 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-first-name"
+                            htmlFor="input-age"
                           >
                             Tuổi
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue=""
-                            id="input-first-name"
+                            id="input-age"
                             placeholder="Age"
                             type="text"
                           />
@@ -219,14 +244,14 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-address"
+                            htmlFor="input-collage"
                           >
                             Trường công tác
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue=""
-                            id="input-address"
+                            id="input-collage"
                             placeholder="Collage Name"
                             type="text"
                           />
@@ -238,14 +263,14 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-city"
+                            htmlFor="input-position"
                           >
                             Chức vụ
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue=""
-                            id="input-city"
+                            id="input-position"
                             placeholder="Position"
                             type="text"
                           />
@@ -255,15 +280,15 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-country"
+                            htmlFor="input-major-user"
                           >
                             Chuyên ngành
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue=""
-                            id="input-country"
-                            placeholder="Major"
+                            id="input-major-user"
+                            placeholder="Position"
                             type="text"
                           />
                         </FormGroup>
@@ -272,13 +297,13 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-country"
+                            htmlFor="input-year-exp"
                           >
                             Số năm kinh nghiệm
                           </label>
                           <Input
                             className="form-control-alternative"
-                            id="input-postal-code"
+                            id="input-year-exp"
                             placeholder="Number Exp"
                             type="number"
                           />
@@ -296,9 +321,8 @@ const Profile = () => {
                       <label>Về tôi</label>
                       <Input
                         className="form-control-alternative"
-                        placeholder="A few words about you ..."
                         rows="4"
-                        defaultValue=""
+                        id="input-about-me"
                         type="textarea"
                       />
                     </FormGroup>
@@ -306,13 +330,17 @@ const Profile = () => {
                   <Col xs="12" className="text-center">
                     <Button
                       color="primary"
-                      href="#pablo"
-                      onClick={() => handleProfileUpdate}
                       size="lg"
+                      onClick={handleUpdateInfo}
                     >
                       Cập nhật
                     </Button>
                   </Col>
+                  {successMessage && (
+                    <Col xs="12" className="text-center mt-2">
+                      <div className="text-success">{successMessage}</div>
+                    </Col>
+                  )}
                 </Form>
               </CardBody>
             </Card>

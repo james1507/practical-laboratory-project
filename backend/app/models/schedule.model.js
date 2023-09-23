@@ -4,13 +4,8 @@ const Schedule = mongoose.model(
   "Schedule",
   new mongoose.Schema(
     {
-      Id: {
-        type: String,
-        unique: true, // Ensure the custom Id is unique
-      },
-      IdUser: {
-        type: String,
-      },
+      IdMatchSchedule: String,
+      IdUser: String,
       Subject: String,
       StartTime: String,
       EndTime: String,

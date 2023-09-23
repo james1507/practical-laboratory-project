@@ -16,26 +16,165 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { Dropdown, DropdownButton } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import {
   DatePickerComponent,
   DateTimePickerComponent,
 } from "@syncfusion/ej2-react-calendars";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 const RegisterPracticeRoom = () => {
-  const title = "Đăng ký phòng thực hành";
-  const message = "Đây là trang đăng ký phòng thực hành, hãy điền thông tin";
+  const title = "Cập nhật thông tin phòng thực hành";
+  const message =
+    "Đây là trang cập nhật thông tin phòng thực hành, hãy điền thông tin";
   const imageName = "pratice_room.png";
 
-  const roompRactice = [
-    { label: "Phòng 707", value: 1 },
-    { label: "Phòng 701", value: 2 },
-    { label: "Phòng 703", value: 3 },
-    { label: "Phòng 705", value: 4 },
-  ];
+  const idMatchSchedule = uuidv4();
 
+  const [practiceRooms, setPracticeRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState("");
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [moderators, setModerators] = useState([]);
+  const [moderator, setSelectedModerator] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [detail, setDetail] = useState("");
+  const [selectedStartDateTime, setSelectedStartDateTime] = useState(null);
+  const [selectedEndDateTime, setSelectedEndDateTime] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    // Fetch data from your API endpoint (e.g., using Axios or fetch)
+    // and set it to the practiceRooms state when the component mounts
+    fetch("http://localhost:8000/api/practice-rooms")
+      .then((response) => response.json())
+      .then((data) => setPracticeRooms(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  useEffect(() => {
+    // Fetch data from your API endpoint (e.g., using Axios or fetch)
+    // and set it to the users state when the component mounts
+    fetch("http://localhost:8000/api/accounts/user")
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  useEffect(() => {
+    // Fetch data from your API endpoint (e.g., using Axios or fetch)
+    // and set it to the users state when the component mounts
+    fetch(`http://localhost:8000/api/accounts/moderator`)
+      .then((response) => response.json())
+      .then((data) => setModerators(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  useEffect(() => {
+    // Fetch subjects from your API endpoint
+    fetch("http://localhost:8000/api/subjects")
+      .then((response) => response.json())
+      .then((data) => setSubjects(data))
+      .catch((error) => console.error("Error fetching subjects:", error));
+  }, []);
+
+  const handleDetailChange = (event) => {
+    // Update the "detail" state variable when the input value changes
+    setDetail(event.target.value);
+  };
+
+  const handleStartDateTimeChange = (event) => {
+    setSelectedStartDateTime(event.value); // Use event.value to get the selected date and time
+  };
+
+  const handleEndDateTimeChange = (event) => {
+    setSelectedEndDateTime(event.value); // Use event.value to get the selected date and time
+  };
+
+  const clearSuccessMessage = () => {
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 2000); // 5000 milliseconds = 5 seconds
+  };
+
+  const handleRegister = () => {
+    const selectedUserObj = users.find(
+      (user) => user.username === selectedUser
+    );
+
+    const selectedModeratorObj = moderators.find(
+      (moderatorItem) => moderatorItem.username === moderator
+    );
+
+    // Find the selected subject object based on its name
+    const selectedSubjectObj = subjects.find(
+      (subject) => subject.Name === selectedSubject
+    );
+
+    // Create an object with the form data
+    const formData = {
+      IdMatchSchedule: idMatchSchedule,
+      Content: document.getElementById("input-address").value,
+      PracticeRoomId: selectedRoom,
+      PraticeRoomName: selectedRoom,
+      UserId: selectedUserObj ? selectedUserObj._id : "",
+      UserName: selectedUser,
+      ModeratorId: selectedModeratorObj ? selectedModeratorObj._id : "",
+      ModeratorName: moderator,
+      SubjectId: selectedSubjectObj ? selectedSubjectObj._id : "",
+      SubjectName: selectedSubject,
+      TimeStart: selectedStartDateTime, // You need to get this value from your DateTimePickerComponent
+      TimeEnd: selectedEndDateTime, // You need to get this value from your DateTimePickerComponent
+      Detail: detail,
+    };
+
+    const formData1 = {
+      IdMatchSchedule: idMatchSchedule,
+      IdUser: formData.UserId,
+      Subject: document.getElementById("input-address").value,
+      Description: `Tên Phòng thực hành: ${formData.PraticeRoomName}\n
+      Tên giảng viên: ${formData.UserName}\n
+      Tên người trực: ${formData.ModeratorName}\n
+      Tên môn học: ${formData.SubjectName}\n
+      Chi tiết: ${formData.Detail}`,
+      StartTime: selectedStartDateTime,
+      EndTime: selectedEndDateTime,
+    };
+
+    // Send a POST request to your API
+    axios
+      .post("http://localhost:8000/api/practice-room-details", formData)
+      .then((response) => {
+        // If the request is successful, set the success message
+        setSuccessMessage("Data created successfully!");
+        clearSuccessMessage();
+      })
+      .catch((error) => {
+        // If there's an error, handle it and display an error message
+        console.error("Error creating data:", error);
+        setSuccessMessage("Error creating data. Please try again.");
+        clearSuccessMessage();
+      });
+
+    axios
+      .post("http://localhost:8000/api/schedules", formData1)
+      .then((response) => {
+        // If the request is successful, set the success message
+        // setSuccessMessage("Data created successfully!");
+        // // Clear the success message after 5 seconds
+        // clearSuccessMessage();
+      })
+      .catch((error) => {
+        // If there's an error, handle it and display an error message
+        console.error("Error creating data:", error);
+        // setSuccessMessage("Error creating data. Please try again.");
+        // // Clear the error message after 5 seconds
+        // clearSuccessMessage();
+      });
+  };
 
   const dropdownButtonRef = useRef();
 
@@ -101,12 +240,12 @@ const RegisterPracticeRoom = () => {
                                 id="dropdown-basic-button"
                                 onSelect={(room) => setSelectedRoom(room)}
                               >
-                                {roompRactice.map((room) => (
+                                {practiceRooms.map((room) => (
                                   <Dropdown.Item
-                                    key={room.value}
-                                    eventKey={room.label}
+                                    key={room._id}
+                                    eventKey={room.Name}
                                   >
-                                    {room.label}
+                                    {room.Name}
                                   </Dropdown.Item>
                                 ))}
                               </DropdownButton>
@@ -127,18 +266,18 @@ const RegisterPracticeRoom = () => {
                               <DropdownButton
                                 className="form-control-alternative w-100"
                                 as={InputGroup.Prepend}
-                                title={selectedRoom || "Chọn phòng thực hành"}
+                                title={selectedUser || "Chọn giảng viên"}
                                 variant="outline-secondary"
                                 color="white"
                                 id="dropdown-basic-button"
-                                onSelect={(room) => setSelectedRoom(room)}
+                                onSelect={(user) => setSelectedUser(user)}
                               >
-                                {roompRactice.map((room) => (
+                                {users.map((user) => (
                                   <Dropdown.Item
-                                    key={room.value}
-                                    eventKey={room.label}
+                                    key={user._id}
+                                    eventKey={user.username}
                                   >
-                                    {room.label}
+                                    {user.username}
                                   </Dropdown.Item>
                                 ))}
                               </DropdownButton>
@@ -161,18 +300,20 @@ const RegisterPracticeRoom = () => {
                               <DropdownButton
                                 className="form-control-alternative w-100"
                                 as={InputGroup.Prepend}
-                                title={selectedRoom || "Chọn phòng thực hành"}
+                                title={moderator || "Chọn người trực"}
                                 variant="outline-secondary"
                                 color="white"
                                 id="dropdown-basic-button"
-                                onSelect={(room) => setSelectedRoom(room)}
+                                onSelect={(moderator) =>
+                                  setSelectedModerator(moderator)
+                                }
                               >
-                                {roompRactice.map((room) => (
+                                {moderators.map((user) => (
                                   <Dropdown.Item
-                                    key={room.value}
-                                    eventKey={room.label}
+                                    key={user._id}
+                                    eventKey={user.username}
                                   >
-                                    {room.label}
+                                    {user.username}
                                   </Dropdown.Item>
                                 ))}
                               </DropdownButton>
@@ -213,18 +354,20 @@ const RegisterPracticeRoom = () => {
                               <DropdownButton
                                 className="form-control-alternative w-100"
                                 as={InputGroup.Prepend}
-                                title={selectedRoom || "Chọn phòng thực hành"}
+                                title={selectedSubject || "Chọn môn học"}
                                 variant="outline-secondary"
                                 color="white"
                                 id="dropdown-basic-button"
-                                onSelect={(room) => setSelectedRoom(room)}
+                                onSelect={(subject) =>
+                                  setSelectedSubject(subject)
+                                }
                               >
-                                {roompRactice.map((room) => (
+                                {subjects.map((subject) => (
                                   <Dropdown.Item
-                                    key={room.value}
-                                    eventKey={room.label}
+                                    key={subject._id}
+                                    eventKey={subject.Name}
                                   >
-                                    {room.label}
+                                    {subject.Name}
                                   </Dropdown.Item>
                                 ))}
                               </DropdownButton>
@@ -240,7 +383,10 @@ const RegisterPracticeRoom = () => {
                           >
                             Thời gian bắt đầu
                           </label>
-                          <DateTimePickerComponent></DateTimePickerComponent>
+                          <DateTimePickerComponent
+                            value={setSelectedStartDateTime} // Bind the selected date and time to the state variable
+                            onChange={handleStartDateTimeChange} // Call this function when the date and time changes
+                          ></DateTimePickerComponent>
                         </FormGroup>
                       </Col>
                       <Col lg="4">
@@ -251,7 +397,10 @@ const RegisterPracticeRoom = () => {
                           >
                             Thời gian kết thúc
                           </label>
-                          <DateTimePickerComponent></DateTimePickerComponent>
+                          <DateTimePickerComponent
+                            value={setSelectedEndDateTime} // Bind the selected date and time to the state variable
+                            onChange={handleEndDateTimeChange} // Call this function when the date and time changes
+                          ></DateTimePickerComponent>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -263,19 +412,21 @@ const RegisterPracticeRoom = () => {
                         className="form-control-alternative"
                         rows="4"
                         type="textarea"
+                        value={detail} // Bind the input value to the state variable
+                        onChange={handleDetailChange} // Call this function when the input changes
                       />
                     </FormGroup>
                   </div>
                   <Col xs="12" className="text-center">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="lg"
-                    >
+                    <Button color="primary" onClick={handleRegister} size="lg">
                       Đăng ký
                     </Button>
                   </Col>
+                  {successMessage && (
+                    <Col xs="12" className="text-center mt-2">
+                      <div className="text-success">{successMessage}</div>
+                    </Col>
+                  )}
                 </Form>
               </CardBody>
             </Card>

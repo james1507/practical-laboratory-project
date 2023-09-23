@@ -154,7 +154,7 @@ exports.updateProfile = (req, res) => {
       major: req.body.major,
       yearExp: req.body.yearExp,
       aboutMe: req.body.aboutMe,
-      // imageUrl: req.body.imageUrl,
+      imageUrl: req.body.imageUrl,
     },
     { new: true },
     (err, user) => {
@@ -168,6 +168,117 @@ exports.updateProfile = (req, res) => {
       res.status(200).send({ message: "Profile updated successfully" });
     }
   );
+};
+
+exports.updateProfileById = async (req, res) => {
+  const userId = req.params.userId;
+
+  // Find the user by their ID
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  User.findByIdAndUpdate(
+    user.id, // Get the user ID from the request token
+    {
+      fullName: req.body.fullName,
+      age: req.body.age,
+      collage: req.body.collage,
+      position: req.body.position,
+      major: req.body.major,
+      yearExp: req.body.yearExp,
+      aboutMe: req.body.aboutMe,
+      imageUrl: req.body.imageUrl,
+    },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      res.status(200).send({ message: "Profile updated successfully" });
+    }
+  );
+};
+
+exports.listAccounts = (req, res) => {
+  User.find({})
+    .populate("roles", "-__v")
+    .exec((err, users) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      const filteredUsers = users.filter((user) => {
+        return user.roles.some((role) => role.name === "user");
+      });
+
+      res.status(200).json(filteredUsers);
+    });
+};
+
+exports.listAccountsByRole = (req, res) => {
+  const role = req.params.role;
+
+  // Validate the role against a list of allowed roles (e.g., "user," "moderator," "admin")
+  const allowedRoles = ["user", "moderator", "admin"];
+  if (!allowedRoles.includes(role)) {
+    return res.status(400).json({ message: "Invalid role" });
+  }
+
+  User.find({}) // Retrieve all users
+    .populate("roles", "-__v")
+    .exec(async (err, users) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      // Filter users based on the specified role
+      const filteredUsers = users.filter((user) => {
+        return user.roles.some((userRole) => userRole.name === role);
+      });
+
+      res.status(200).json(filteredUsers);
+    });
+};
+
+exports.getInfoById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by their ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Respond with the user's detail information
+    res.status(200).json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles,
+      fullName: user.fullName,
+      age: user.age,
+      collage: user.collage,
+      position: user.position,
+      major: user.major,
+      yearExp: user.yearExp,
+      aboutMe: user.aboutMe,
+      imageUrl: user.imageUrl,
+    });
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 exports.signout = async (req, res) => {

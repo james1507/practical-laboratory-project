@@ -4,6 +4,9 @@ import Register from "views/Register/Register.js";
 import Login from "views/Login/Login.js";
 import RegisterPracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom";
 import RegisterBorrowEquipment from "views/RegisterBorrowEquipment/RegisterBorrowEquipment";
+import ListPracticeRoom from "views/ListPracticeRoom/ListPracticeRoom";
+import ListAllUser from "views/ListAllUser/ListAllUser";
+import UpdatePracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom";
 
 var routes = [
   {
@@ -14,12 +17,12 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/user-register-practice-room",
+    path: "/user-update-practice-room",
     name: "Cập nhật thông tin",
     icon: "ni ni-laptop text-yellow",
-    component: <RegisterPracticeRoom />,
+    component: <UpdatePracticeRoom />,
     layout: "/admin",
-    isAdminOrModerator: true,
+    isAdminOrModerator: false,
   },
   {
     path: "/user-register-practice-room",
@@ -28,14 +31,24 @@ var routes = [
     component: <RegisterPracticeRoom />,
     layout: "/admin",
     isAdminOrModerator: false,
+    isAdmin: false,
+  },
+  {
+    path: "/tables",
+    name: "Danh sách phòng thực hành",
+    icon: "ni ni-ui-04 text-green",
+    component: <ListPracticeRoom />,
+    layout: "/admin",
+    isAdminOrModerator: false,
   },
   {
     path: "/user-management",
     name: "Quản lý nhân sự",
     icon: "ni ni-laptop text-yellow",
-    component: <RegisterPracticeRoom />,
+    component: <ListAllUser />,
     layout: "/admin",
     isAdminOrModerator: false,
+    isAdmin: false,
   },
   {
     path: "/user-equipment",

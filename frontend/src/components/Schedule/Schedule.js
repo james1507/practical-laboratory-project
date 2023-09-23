@@ -11,21 +11,16 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { Button, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState([]);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editMode, setEditMode] = useState(false); // To toggle between create and edit modes
-  const [editEventData, setEditEventData] = useState(null); // To store data for editing
-  const [newEventData, setNewEventData] = useState({
-    Id: "",
-    Subject: "",
-    StartTime: new Date(),
-    EndTime: new Date(),
-  });
 
   const userId = useSelector((state) => state.auth.id);
   const roles = useSelector((state) => state.auth.roles);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const navigate = useNavigate();
 
   const hasRequiredRole = roles.some(
     (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
@@ -55,17 +50,6 @@ const Schedule = () => {
       });
   };
 
-  const onCreateButtonClick = () => {
-    setShowCreateForm(true);
-    setEditMode(false); // Switch to create mode
-    setNewEventData({
-      Id: "",
-      Subject: "",
-      StartTime: new Date(),
-      EndTime: new Date(),
-    });
-  };
-
   const onPopupOpen = (args) => {
     if (
       args.type === "Editor" &&
@@ -73,89 +57,6 @@ const Schedule = () => {
       args.target.classList.contains("e-appointment-add")
     ) {
       args.cancel = true;
-      setShowCreateForm(true);
-      setEditMode(false); // Switch to create mode
-      setNewEventData({
-        Id: "",
-        Subject: "",
-        StartTime: new Date(),
-        EndTime: new Date(),
-      });
-    }
-  };
-
-  const onFormInputChange = (e) => {
-    const { name, value } = e.target;
-    const newValue =
-      name === "StartTime" || name === "EndTime" ? new Date(value) : value;
-
-    if (editMode) {
-      // If in edit mode, update editEventData
-      setEditEventData((prevState) => ({
-        ...prevState,
-        [name]: newValue,
-      }));
-    } else {
-      // If in create mode, update newEventData
-      setNewEventData((prevState) => ({
-        ...prevState,
-        [name]: newValue,
-      }));
-    }
-  };
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-
-    const eventDataToSubmit = {
-      ...newEventData,
-      StartTime: newEventData.StartTime.toISOString(),
-      EndTime: newEventData.EndTime.toISOString(),
-    };
-
-    if (editMode) {
-      // If in edit mode, update the event
-      axios
-        .put(
-          `http://localhost:8000/api/schedules/${editEventData.Id}`,
-          eventDataToSubmit
-        )
-        .then(() => {
-          console.log("Schedule event updated successfully.");
-          fetchScheduleData();
-          setShowCreateForm(false);
-        })
-        .catch((error) => {
-          console.error("Error updating schedule event:", error);
-        });
-    } else {
-      // If in create mode, create a new event
-      axios
-        .post("http://localhost:8000/api/schedules", eventDataToSubmit)
-        .then(() => {
-          console.log("New schedule event created successfully.");
-          fetchScheduleData();
-          setShowCreateForm(false);
-        })
-        .catch((error) => {
-          console.error("Error creating new schedule event:", error);
-        });
-    }
-  };
-
-  const onDeleteButtonClick = () => {
-    if (editEventData && editEventData.Id) {
-      // If in edit mode and editEventData has an ID, delete the event
-      axios
-        .delete(`http://localhost:8000/api/schedules/${editEventData.Id}`)
-        .then(() => {
-          console.log("Schedule event deleted successfully.");
-          fetchScheduleData();
-          setShowCreateForm(false);
-        })
-        .catch((error) => {
-          console.error("Error deleting schedule event:", error);
-        });
     }
   };
 
@@ -170,128 +71,38 @@ const Schedule = () => {
     },
   };
 
+  const handleEventClick = (args) => {
+    // Set the selected event when an event is clicked
+    setSelectedEvent(args.event);
+  };
+
+  const handleRegisterClick = () => {
+    // Navigate to the desired route when Đăng ký button is clicked
+    navigate(
+      `/admin/user-update-practice-room?IdMatchSchedule=${selectedEvent.IdMatchSchedule}`
+    );
+  };
+
   return (
     <>
       <ScheduleComponent
         readonly={true}
-        height="650px"
+        height="700px"
         eventSettings={eventSettings}
         popupOpen={onPopupOpen}
-        eventClick={(args) => {
-          setShowCreateForm(true);
-          setEditMode(true); // Switch to edit mode
-          setEditEventData(args.event); // Set data for editing
-        }}
+        eventClick={handleEventClick} // Call the event handler when an event is clicked
       >
         <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
       </ScheduleComponent>
-      <div className="create-button-container">
-        <button onClick={onCreateButtonClick}>Create Event</button>
-      </div>
-      {showCreateForm && (
-        <div className="create-form-container">
-          {editMode ? (
-            // Edit mode form
-            <form onSubmit={onFormSubmit}>
-              <label>
-                Event ID:
-                <input
-                  type="text"
-                  name="Id"
-                  value={editEventData.Id}
-                  onChange={onFormInputChange}
-                  readOnly // Read-only for edit mode
-                />
-              </label>
-              <label>
-                Event Subject:
-                <input
-                  type="text"
-                  name="Subject"
-                  value={editEventData.Subject}
-                  onChange={onFormInputChange}
-                />
-              </label>
-              <label>
-                Start Time:
-                <input
-                  type="datetime-local"
-                  name="StartTime"
-                  value={editEventData.StartTime.toISOString().slice(0, -8)}
-                  onChange={onFormInputChange}
-                />
-              </label>
-              <label>
-                End Time:
-                <input
-                  type="datetime-local"
-                  name="EndTime"
-                  value={editEventData.EndTime.toISOString().slice(0, -8)}
-                  onChange={onFormInputChange}
-                />
-              </label>
-              <button type="submit">Save Changes</button>
-            </form>
-          ) : (
-            // Create mode form
-            <form onSubmit={onFormSubmit}>
-              <label>
-                Event ID:
-                <input
-                  type="text"
-                  name="Id"
-                  value={newEventData.Id}
-                  onChange={onFormInputChange}
-                />
-              </label>
-              <label>
-                Event Subject:
-                <input
-                  type="text"
-                  name="Subject"
-                  value={newEventData.Subject}
-                  onChange={onFormInputChange}
-                />
-              </label>
-              <label>
-                Start Time:
-                <DateTimePickerComponent
-                  type="datetime-local"
-                  name="StartTime"
-                  value={newEventData.StartTime}
-                  onChange={onFormInputChange}
-                ></DateTimePickerComponent>
-                {/* <input
-                  type="datetime-local"
-                  name="StartTime"
-                  value={newEventData.StartTime.toISOString().slice(0, -8)}
-                  onChange={onFormInputChange}
-                /> */}
-              </label>
-              <label>
-                End Time:
-                <DateTimePickerComponent
-                  type="datetime-local"
-                  name="EndTime"
-                  value={newEventData.EndTime}
-                  onChange={onFormInputChange}
-                ></DateTimePickerComponent>
-                {/* <input
-                  type="datetime-local"
-                  name="EndTime"
-                  value={newEventData.EndTime.toISOString().slice(0, -8)}
-                  onChange={onFormInputChange}
-                /> */}
-              </label>
-              <button type="submit">Save</button>
-            </form>
-          )}
-
-          {/* Delete Event Button */}
-          {editMode && (
-            <button onClick={onDeleteButtonClick}>Delete Event</button>
-          )}
-        </div>
+      {selectedEvent && (
+        <>
+          <h1>Selected Event: {selectedEvent.IdMatchSchedule}</h1>
+          <Col xs="12" className="text-center">
+            <Button color="primary" onClick={handleRegisterClick} size="lg">
+              Cập nhật thông tin
+            </Button>
+          </Col>
+        </>
       )}
     </>
   );

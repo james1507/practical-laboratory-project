@@ -6,26 +6,17 @@ exports.allAccess = (req, res) => {
 };
 
 // Create a new schedule
-exports.createSchedule = async (req, res) => {
-  try {
-    const { Id, IdUser, Subject, StartTime, EndTime, Description } = req.body;
+exports.createSchedule = (req, res) => {
+  const schedule = new Schedule(req.body);
 
-    const schedule = new Schedule({
-      Id,
-      IdUser,
-      Subject,
-      StartTime,
-      EndTime,
-      Description,
-    });
-    await schedule.save();
-
-    res
-      .status(201)
-      .json({ Id, IdUser, Subject, StartTime, EndTime, Description });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+  schedule.save((err, data) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Error creating schedule",
+      });
+    }
+    res.json(data);
+  });
 };
 
 exports.getAllSchedulesByUser = async (req, res) => {

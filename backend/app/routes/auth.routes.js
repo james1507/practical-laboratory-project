@@ -23,7 +23,23 @@ module.exports = function (app) {
     controller.updateProfile
   );
 
+  app.put("/api/auth/update-profile/:userId", controller.updateProfileById);
+
   app.post("/api/auth/signin", controller.signin);
+
+  app.get(
+    "/api/accounts",
+    // [verifyToken, isAdmin],
+    controller.listAccounts
+  );
+
+  app.get(
+    "/api/accounts/:role",
+    // [verifyToken, isAdmin],
+    controller.listAccountsByRole
+  );
+
+  app.get("/api/accounts/user/:userId", controller.getInfoById);
 
   app.post("/api/auth/signout", controller.signout);
 };
