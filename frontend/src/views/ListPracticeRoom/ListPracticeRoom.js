@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, Table, Container, Row } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  Table,
+  Container,
+  Row,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 import Header from "components/Headers/Header";
 import ReactPaginate from "react-paginate";
 
@@ -71,23 +81,6 @@ const ListPracticeRoom = () => {
                     </tr>
                   ))}
                 </tbody>
-                {/* <tfoot>
-                  <tr>
-                    <td colSpan="7">
-                      <ReactPaginate
-                        previousLabel={"Previous"}
-                        nextLabel={"Next"}
-                        pageCount={pageCount}
-                        onPageChange={changePage}
-                        containerClassName={"pagination"}
-                        previousLinkClassName={"pagination__link"}
-                        nextLinkClassName={"pagination__link"}
-                        disabledClassName={"pagination__link--disabled"}
-                        activeClassName={"pagination__link--active"}
-                      />
-                    </td>
-                  </tr>
-                </tfoot> */}
               </Table>
             </Card>
           </div>

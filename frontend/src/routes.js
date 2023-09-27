@@ -7,6 +7,7 @@ import RegisterBorrowEquipment from "views/RegisterBorrowEquipment/RegisterBorro
 import ListPracticeRoom from "views/ListPracticeRoom/ListPracticeRoom";
 import ListAllUser from "views/ListAllUser/ListAllUser";
 import UpdatePracticeRoom from "views/UpdatePracticeRoom/UpdatePracticeRoom";
+import ListAllEquipment from "views/RegisterBorrowEquipment/ListAllEquipment";
 
 var routes = [
   {
@@ -17,14 +18,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/user-update-practice-room",
-    name: "Cập nhật thông tin",
-    icon: "ni ni-laptop text-yellow",
-    component: <UpdatePracticeRoom />,
-    layout: "/admin",
-    isAdminOrModerator: false,
-  },
-  {
     path: "/user-register-practice-room",
     name: "Đăng ký phòng thực hành",
     icon: "ni ni-laptop text-yellow",
@@ -32,6 +25,14 @@ var routes = [
     layout: "/admin",
     isAdminOrModerator: false,
     isAdmin: false,
+  },
+  {
+    path: "/user-update-practice-room",
+    name: "Cập nhật thông tin",
+    icon: "ni ni-laptop text-yellow",
+    component: <UpdatePracticeRoom />,
+    layout: "/admin",
+    isAdminOrModerator: false,
   },
   {
     path: "/tables",
@@ -53,8 +54,8 @@ var routes = [
   {
     path: "/user-equipment",
     name: "Quản lý thiết bị",
-    icon: "ni ni-laptop text-yellow",
-    component: <RegisterPracticeRoom />,
+    icon: "ni ni-settings text-green",
+    component: <ListAllEquipment />,
     layout: "/admin",
     isAdminOrModerator: false,
   },
@@ -93,6 +94,14 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: <Register />,
     layout: "/auth",
+  },
+  {
+    path: "/create-equipment",
+    name: "Tạo thiết bị mới",
+    icon: "ni ni-settings text-green",
+    component: <RegisterBorrowEquipment />,
+    layout: "/admin",
+    isHide: true,
   },
   // {
   //   path: "/icons",

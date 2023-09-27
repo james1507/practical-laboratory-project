@@ -54,7 +54,8 @@ const Sidebar = (props) => {
         prop.path !== "/login" &&
         prop.path !== "/register" &&
         hasRequiredRole !== prop.isAdminOrModerator &&
-        isAdmin !== prop.isAdmin
+        isAdmin !== prop.isAdmin &&
+        !prop.isHide
     );
 
     return filteredRoutes.map((prop, key) => {

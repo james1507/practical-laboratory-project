@@ -12,11 +12,20 @@ import {
 } from "reactstrap";
 import Header from "components/Headers/Header";
 import ReactPaginate from "react-paginate";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-const ListAllUser = () => {
+const ListAllEquipment = () => {
   const [userInfos, setUserInfos] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = 5; // Number of items to display per page
+
+  const navigate = useNavigate();
+
+  const handleRegisterClick = () => {
+    // Navigate to the desired route when Đăng ký button is clicked
+    navigate(`/admin/create-equipment`);
+  };
 
   useEffect(() => {
     // Fetch data from the API
@@ -48,20 +57,31 @@ const ListAllUser = () => {
       <Container className="mt--10" fluid>
         <Row>
           <div className="col">
-            <Card className="shadow">
-              <CardHeader className="border-0">
-                <h3 className="mb-0">Danh sách người dùng</h3>
-              </CardHeader>
+            <Card className="shadow pt-4">
+              <div className="d-flex justify-content-between">
+                {/* Move the CardHeader to the left */}
+                <CardHeader className="border-0">
+                  <h3 className="mb-0">Danh sách người dùng</h3>
+                </CardHeader>
+                {/* Add the "Cập nhật" button on the right */}
+                <div className="text-right">
+                  <Button
+                    color="primary"
+                    size="lg"
+                    onClick={handleRegisterClick}
+                  >
+                    Tạo mới
+                  </Button>
+                </div>
+              </div>
+
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Tên tài khoản</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Họ tên</th>
-                    <th scope="col">Tuổi</th>
-                    <th scope="col">Chuyên ngành</th>
-                    <th scope="col">Vị trí</th>
-                    <th scope="col">Kinh nghiệm làm việc</th>
+                    <th scope="col">Tên Thiết bị</th>
+                    <th scope="col">Người mượn</th>
+                    <th scope="col">Phòng mượn</th>
+                    <th scope="col">Mô tá</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -72,14 +92,10 @@ const ListAllUser = () => {
                       <td>{detail.email}</td>
                       <td>{detail.fullName}</td>
                       <td>{detail.age}</td>
-                      <td>{detail.major}</td>
-                      <td>{detail.position}</td>
-                      <td>{detail.yearExp}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -109,4 +125,4 @@ const ListAllUser = () => {
   );
 };
 
-export default ListAllUser;
+export default ListAllEquipment;
