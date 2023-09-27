@@ -27,6 +27,11 @@ module.exports = function (app) {
   // Update a schedule by ID
   app.put("/api/schedules/:id", scheduleController.updateSchedule);
 
+  app.put(
+    "/api/update-by-id-match-schedule/:IdMatchSchedule",
+    scheduleController.updateScheduleByIdMatchSchedule
+  );
+
   // Delete a schedule by ID
   app.delete("/api/schedules/:id", scheduleController.deleteSchedule);
 };

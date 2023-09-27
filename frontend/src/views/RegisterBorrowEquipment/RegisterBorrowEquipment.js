@@ -26,13 +26,12 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import "./css/ListAllEquipment.css";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegisterBorrowEquipment = () => {
   const title = "Tạo mới mượn thiết bị";
   const message = "Đây là trang tạo mới mượn thiết bị";
   const imageName = "pratice_room.png";
-
-  const idMatchSchedule = uuidv4();
 
   const [practiceRooms, setPracticeRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -42,6 +41,7 @@ const RegisterBorrowEquipment = () => {
   const [selectedlistRoomDetail, setSelectedListRoomDetail] = useState("");
   const [detail, setDetail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const username = useSelector((state) => state.auth.username);
 
   useEffect(() => {
     // Fetch data from your API endpoint (e.g., using Axios or fetch)
@@ -85,59 +85,25 @@ const RegisterBorrowEquipment = () => {
       (user) => user.username === selectedUser
     );
 
-    // Create an object with the form data
     const formData = {
-      IdMatchSchedule: idMatchSchedule,
-      PracticeRoomId: selectedRoom,
-      PraticeRoomName: selectedRoom,
-      UserId: selectedUserObj ? selectedUserObj._id : "",
-      UserName: selectedUser,
-      Detail: detail,
+      IdUser: username,
+      RoomName: selectedlistRoomDetail.PraticeRoomName,
+      EquipmentName: document.getElementById("input-equipment-name").value,
+      EquipmentDescription: detail,
     };
 
-    const formData1 = {
-      IdMatchSchedule: idMatchSchedule,
-      IdUser: formData.UserId,
-      Subject: document.getElementById("input-address").value,
-      Description: `Tên Phòng thực hành: ${formData.PraticeRoomName}\n
-      Tên giảng viên: ${formData.UserName}\n
-      Tên người trực: ${formData.ModeratorName}\n
-      Tên môn học: ${formData.SubjectName}\n
-      Chi tiết: ${formData.Detail}\n
-      Thiết bị đã mượn:\n
-      ${document}`,
-      ResourceId: 3,
-    };
-
-    // Send a POST request to your API
     axios
-      .post("http://localhost:8000/api/practice-room-details", formData)
+      .post(`http://localhost:8000/api/equipment`, formData)
       .then((response) => {
-        // If the request is successful, set the success message
         setSuccessMessage("Data created successfully!");
+        // Clear the success message after 5 seconds
         clearSuccessMessage();
       })
       .catch((error) => {
-        // If there's an error, handle it and display an error message
         console.error("Error creating data:", error);
         setSuccessMessage("Error creating data. Please try again.");
+        // Clear the error message after 5 seconds
         clearSuccessMessage();
-      });
-
-    axios
-      .post("http://localhost:8000/api/schedules", formData1)
-      .then((response) => {
-        // If the request is successful, set the success message
-        // setSuccessMessage("Data created successfully!");
-        // // Clear the success message after 5 seconds
-        // clearSuccessMessage();
-      })
-      .catch((error) => {
-        // If there's an error, handle it and display an error message
-        console.error("Error creating data:", error);
-        // setSuccessMessage("Error creating data. Please try again.");
-        // // Clear the error message after 5 seconds
-        // clearSuccessMessage();
       });
   };
 
@@ -169,76 +135,7 @@ const RegisterBorrowEquipment = () => {
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="3">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-email"
-                          >
-                            Giảng viên
-                          </label>
-                          <InputGroup>
-                            <div ref={dropdownButtonRef}>
-                              <DropdownButton
-                                className="form-control-alternative w-100"
-                                as={InputGroup.Prepend}
-                                title={selectedUser || "Chọn giảng viên"}
-                                variant="outline-secondary"
-                                color="white"
-                                id="dropdown-basic-button"
-                                onSelect={(user) => setSelectedUser(user)}
-                              >
-                                {users.map((user) => (
-                                  <Dropdown.Item
-                                    key={user._id}
-                                    eventKey={user.username}
-                                  >
-                                    {user.username}
-                                  </Dropdown.Item>
-                                ))}
-                              </DropdownButton>
-                            </div>
-                          </InputGroup>
-                        </FormGroup>
-                      </Col>
-                      <Col lg="3">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-city"
-                          >
-                            Chi tiết thông tin phòng thực hành
-                          </label>
-                          <InputGroup>
-                            <div ref={dropdownButtonRef}>
-                              <DropdownButton
-                                className="form-control-alternative w-100"
-                                as={InputGroup.Prepend}
-                                title={
-                                  selectedlistRoomDetail ||
-                                  "Chọn phòng thực hành"
-                                }
-                                variant="outline-secondary"
-                                color="white"
-                                id="dropdown-basic-button"
-                                onSelect={(subject) =>
-                                  setSelectedListRoomDetail(subject)
-                                }
-                              >
-                                {listRoomDetails.map((subject) => (
-                                  <Dropdown.Item
-                                    key={subject._id}
-                                    eventKey={subject.PraticeRoomName}
-                                  >
-                                    {subject.Content}
-                                  </Dropdown.Item>
-                                ))}
-                              </DropdownButton>
-                            </div>
-                          </InputGroup>
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
+                      <Col lg="12">
                         <FormGroup>
                           <label
                             className="form-control-label"

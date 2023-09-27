@@ -16,9 +16,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const ListAllEquipment = () => {
-  const [userInfos, setUserInfos] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const itemsPerPage = 5; // Number of items to display per page
+  const [equipmentInfos, setEquipmentInfos] = useState([]);
 
   const navigate = useNavigate();
 
@@ -29,27 +27,11 @@ const ListAllEquipment = () => {
 
   useEffect(() => {
     // Fetch data from the API
-    fetch("http://localhost:8000/api/accounts")
+    fetch("http://localhost:8000/api/equipments")
       .then((response) => response.json())
-      .then((data) => setUserInfos(data))
+      .then((data) => setEquipmentInfos(data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
-
-  function formatDate(dateString) {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  }
-
-  const pageCount = Math.ceil(userInfos.length / itemsPerPage);
-
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
-  const displayedPracticeRoomDetails = userInfos.slice(
-    pageNumber * itemsPerPage,
-    (pageNumber + 1) * itemsPerPage
-  );
 
   return (
     <>
@@ -61,7 +43,7 @@ const ListAllEquipment = () => {
               <div className="d-flex justify-content-between">
                 {/* Move the CardHeader to the left */}
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Danh sách người dùng</h3>
+                  <h3 className="mb-0">Danh sách thiết bị</h3>
                 </CardHeader>
                 {/* Add the "Cập nhật" button on the right */}
                 <div className="text-right">
@@ -80,18 +62,16 @@ const ListAllEquipment = () => {
                   <tr>
                     <th scope="col">Tên Thiết bị</th>
                     <th scope="col">Người mượn</th>
-                    <th scope="col">Phòng mượn</th>
                     <th scope="col">Mô tá</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {userInfos.map((detail) => (
+                  {equipmentInfos.map((detail) => (
                     <tr key={detail._id}>
-                      <td>{detail.username}</td>
-                      <td>{detail.email}</td>
-                      <td>{detail.fullName}</td>
-                      <td>{detail.age}</td>
+                      <td>{detail.EquipmentName}</td>
+                      <td>{detail.IdUser}</td>
+                      <td>{detail.EquipmentDescription}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle

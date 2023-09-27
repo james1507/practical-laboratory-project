@@ -89,6 +89,22 @@ exports.updateSchedule = async (req, res) => {
   }
 };
 
+exports.updateScheduleByIdMatchSchedule = async (req, res) => {
+  try {
+    const { IdMatchSchedule } = req.params; // Get IdMatchSchedule from route parameter
+    const updatedSchedule = await Schedule.findOneAndUpdate(
+      { IdMatchSchedule },
+      req.body, // Update with the provided data
+      { new: true }
+    );
+    if (!updatedSchedule) {
+      return res.status(404).json({ message: "Schedule not found" });
+    }
+    res.status(200).json(updatedSchedule);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 // Delete a schedule by ID
 exports.deleteSchedule = async (req, res) => {
   try {

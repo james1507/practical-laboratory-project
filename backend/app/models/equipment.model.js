@@ -4,7 +4,6 @@ const Equipment = mongoose.model(
   "Equipment",
   new mongoose.Schema(
     {
-      IdMatchSchedule: String,
       IdUser: String,
       EquipmentName: String,
       EquipmentDescription: String,
