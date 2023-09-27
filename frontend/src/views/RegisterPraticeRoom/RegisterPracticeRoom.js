@@ -26,9 +26,9 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 const RegisterPracticeRoom = () => {
-  const title = "Cập nhật thông tin phòng thực hành";
+  const title = "Đăng ký thông tin phòng thực hành";
   const message =
-    "Đây là trang cập nhật thông tin phòng thực hành, hãy điền thông tin";
+    "Đây là trang đăng ký thông tin phòng thực hành, hãy điền thông tin";
   const imageName = "pratice_room.png";
 
   const idMatchSchedule = uuidv4();
@@ -142,6 +142,7 @@ const RegisterPracticeRoom = () => {
       Chi tiết: ${formData.Detail}`,
       StartTime: selectedStartDateTime,
       EndTime: selectedEndDateTime,
+      ResourceId: 3,
     };
 
     // Send a POST request to your API

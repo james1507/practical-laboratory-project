@@ -10,6 +10,7 @@ const Schedule = mongoose.model(
       StartTime: String,
       EndTime: String,
       Description: String,
+      ResourceId: String,
     },
     {
       versionKey: false,

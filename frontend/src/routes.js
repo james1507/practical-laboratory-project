@@ -6,7 +6,7 @@ import RegisterPracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom
 import RegisterBorrowEquipment from "views/RegisterBorrowEquipment/RegisterBorrowEquipment";
 import ListPracticeRoom from "views/ListPracticeRoom/ListPracticeRoom";
 import ListAllUser from "views/ListAllUser/ListAllUser";
-import UpdatePracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom";
+import UpdatePracticeRoom from "views/UpdatePracticeRoom/UpdatePracticeRoom";
 
 var routes = [
   {

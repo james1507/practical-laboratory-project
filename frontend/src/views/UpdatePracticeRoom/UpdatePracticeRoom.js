@@ -198,7 +198,6 @@ const UpdatePracticeRoom = () => {
         imageCover={imageName}
       />
       {/* Page content */}
-      <h1>Selected IdMatchSchedule: {idMatchSchedule}</h1>
       <Container className="mt--7" fluid>
         <Row>
           <Col className="order-xl-1" xl="12">
@@ -207,7 +206,7 @@ const UpdatePracticeRoom = () => {
                   
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Đăng ký phòng thực hành</h3>
+                    <h3 className="mb-0">Cập nhật phòng thực hành</h3>
                   </Col>
                 </Row>
               </CardHeader>
@@ -433,7 +432,7 @@ const UpdatePracticeRoom = () => {
                   </div>
                   <Col xs="12" className="text-center">
                     <Button color="primary" onClick={handleRegister} size="lg">
-                      Đăng ký
+                      Cập nhật
                     </Button>
                   </Col>
                   {successMessage && (

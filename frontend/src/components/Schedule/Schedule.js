@@ -7,6 +7,8 @@ import {
   WorkWeek,
   Month,
   Agenda,
+  ResourcesDirective,
+  ResourceDirective
 } from "@syncfusion/ej2-react-schedule";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -60,6 +62,12 @@ const Schedule = () => {
     }
   };
 
+  const resourceData = [
+    {Name: 'Đang trống', Id: 1, Color: '#1aaa55'},
+    {Name: 'Đang sử dụng', Id: 2, Color: '#357cd2'},
+    {Name: 'Đã đặt', Id: 3, Color: '#FF0000'},
+  ];
+
   const eventSettings = {
     dataSource: scheduleData,
     id: "Id",
@@ -68,6 +76,7 @@ const Schedule = () => {
       subject: "Subject",
       startTime: "StartTime",
       endTime: "EndTime",
+      resourceId: "ResourceId",
     },
   };
 
@@ -83,6 +92,8 @@ const Schedule = () => {
     );
   };
 
+
+
   return (
     <>
       <ScheduleComponent
@@ -92,11 +103,24 @@ const Schedule = () => {
         popupOpen={onPopupOpen}
         eventClick={handleEventClick} // Call the event handler when an event is clicked
       >
+        <ResourcesDirective>
+        <ResourceDirective
+          field="resourceId"
+          title="Resource"
+          name="Resource"
+          allowMultiple={false}
+          dataSource={resourceData}
+          textField="Name"
+          idField="Id"
+          colorField="Color"
+        />
+      </ResourcesDirective>
         <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
       </ScheduleComponent>
       {selectedEvent && (
         <>
           <h1>Selected Event: {selectedEvent.IdMatchSchedule}</h1>
+          <h2>Resource ID: {selectedEvent.ResourceId}</h2>
           <Col xs="12" className="text-center">
             <Button color="primary" onClick={handleRegisterClick} size="lg">
               Cập nhật thông tin
