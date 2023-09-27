@@ -40,6 +40,17 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.findAllByUserId = (req, res) => {
+  const { IdUser } = req.params; // Assuming you're passing IdUser as a route parameter
+
+  Schedule.find({ IdUser }, (err, data) => {
+    if (err) {
+      return res.status(500).send({ message: err });
+    }
+    res.send(data);
+  });
+};
+
 // Update a Schedule by Id
 exports.update = (req, res) => {
   Schedule.findByIdAndUpdate(

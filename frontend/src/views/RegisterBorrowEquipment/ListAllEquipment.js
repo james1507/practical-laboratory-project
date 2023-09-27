@@ -14,9 +14,11 @@ import Header from "components/Headers/Header";
 import ReactPaginate from "react-paginate";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ListAllEquipment = () => {
   const [equipmentInfos, setEquipmentInfos] = useState([]);
+  const username = useSelector((state) => state.auth.username);
 
   const navigate = useNavigate();
 
@@ -27,11 +29,11 @@ const ListAllEquipment = () => {
 
   useEffect(() => {
     // Fetch data from the API
-    fetch("http://localhost:8000/api/equipments")
+    fetch(`http://localhost:8000/api/equipment/by-user/${username}`)
       .then((response) => response.json())
       .then((data) => setEquipmentInfos(data))
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  }, [username]);
 
   return (
     <>

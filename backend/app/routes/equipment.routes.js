@@ -19,6 +19,8 @@ module.exports = function (app) {
   // Update a Schedule by Id
   app.put("/api/equipment/:id", controller.update);
 
+  app.get("/api/equipment/by-user/:IdUser", controller.findAllByUserId);
+
   // Delete a Schedule by Id
   app.delete("/api/equipment/:id", controller.delete);
 };
