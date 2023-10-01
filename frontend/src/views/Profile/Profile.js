@@ -68,7 +68,7 @@ const Profile = () => {
 
     axios
       .put(
-        `http://localhost:8000/api/auth/update-profile/${userId}`,
+        `http://localhost:8000/api/auth/update-profile/${userId}`, // đầu api để yêu cầu 
         formData,
         {
           headers: {

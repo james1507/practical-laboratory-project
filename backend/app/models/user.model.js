@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+// mongoose dùng để query dữ liệu từ backend
+// tới mongodb
+// Tại phần server.js đã config phần này
+// Nên ở đây chỉ cần gọi ra là có thể query
 const User = mongoose.model(
   "User",
   new mongoose.Schema({

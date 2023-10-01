@@ -34,6 +34,7 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
+// Kiểm tra xem code đã kết nối hay chưa
 db.mongoose
   .connect(
     `mongodb+srv://harperdev20:OcdiZpgfuKSzpR1m@cluster0.yxxylrt.mongodb.net/?retryWrites=true&w=majority`,
@@ -43,11 +44,11 @@ db.mongoose
       useUnifiedTopology: true,
     }
   )
-  .then(() => {
+  .then(() => { // Khi mà kết nối thành công 
     console.log("Successfully connect to MongoDB.");
     initial();
   })
-  .catch((err) => {
+  .catch((err) => { // Nếum à không thày công
     console.error("Connection error", err);
     process.exit();
   });

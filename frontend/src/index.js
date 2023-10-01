@@ -27,7 +27,7 @@ registerLicense(
 );
 
 // Load the Vietnamese CLDR data
-loadCldr(n1, n2, n3, n4, s, s2);
+loadCldr(n1, n2, n3, n4, s, s2); 
 setCulture("vi");
 
 // Set the culture to Vietnamese

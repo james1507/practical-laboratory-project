@@ -20,7 +20,7 @@ async function createUserSchedule(userId) {
       EndTime: endTime.toISOString(),
       Description: "Default Description",
     });
-
+    
     await schedule.save();
   } catch (error) {
     console.error("Error creating user schedule:", error);
@@ -52,6 +52,7 @@ exports.signup = (req, res) => {
           }
 
           user.roles = roles.map((role) => role._id);
+          // Query tạo mới và lưu vào trong db
           user.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
@@ -87,7 +88,7 @@ exports.signup = (req, res) => {
   });
 };
 
-exports.signin = (req, res) => {
+exports.signin = (req, res) => { 
   User.findOne({
     username: req.body.username,
   })
@@ -144,6 +145,7 @@ exports.signin = (req, res) => {
 };
 
 exports.updateProfile = (req, res) => {
+  // Query cập nhật thông tin
   User.findByIdAndUpdate(
     req.userId, // Get the user ID from the request token
     {
@@ -174,12 +176,16 @@ exports.updateProfileById = async (req, res) => {
   const userId = req.params.userId;
 
   // Find the user by their ID
+  // Query tìm kiếm một trường dữ liệu theo id của bảng
   const user = await User.findById(userId);
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
 
+
+  // findByIdAndUpdate chính là hàm query để tìm tới cái id mà mình muốn cập nhật và 
+  // thực hiện cập nhật nó
   User.findByIdAndUpdate(
     user.id, // Get the user ID from the request token
     {

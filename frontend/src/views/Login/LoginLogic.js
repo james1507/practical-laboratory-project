@@ -31,6 +31,7 @@ const handleSignIn = async (
 
   setLoading(true);
 
+  // axios xử lý dữ liệu từ api
   try {
     const response = await axios.post(
       "http://localhost:8000/api/auth/signin",
@@ -42,7 +43,7 @@ const handleSignIn = async (
       }
     );
 
-    if (response.status === 200) {
+    if (response.status === 200) { // 200 giá trị 
       dispatch(setLoggedIn(true));
       dispatch(setId(response.data.id));
       dispatch(setUsername(response.data.username));

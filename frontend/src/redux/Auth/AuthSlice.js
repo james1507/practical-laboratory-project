@@ -6,7 +6,7 @@ const initialState = {
   id: "",
   username: "",
   email: "",
-  isLoggedIn: false,
+  isLoggedIn: false, // true
   isSignUp: false,
   roles: [],
   fullName: String,

@@ -19,12 +19,12 @@ import { useNavigate } from "react-router-dom";
 const Schedule = () => {
   const [scheduleData, setScheduleData] = useState([]);
 
-  const userId = useSelector((state) => state.auth.id);
+  const userId = useSelector((state) => state.auth.id); // goi tu kho du lieu ra
   const roles = useSelector((state) => state.auth.roles);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
 
-  const hasRequiredRole = roles.some(
+  const hasRequiredRole = roles.some( // check xem day co phai la nguoi truc hay la admin khong ?
     (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
   );
 

@@ -26,9 +26,12 @@ const Login = () => {
     password: "",
   });
 
+  // username
+  // password
+
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Chờ dữ liệu từ backend tới
   const [error, setError] = useState(null);
 
   return (
@@ -98,7 +101,7 @@ const Login = () => {
                   className="my-4"
                   color="primary"
                   type="button"
-                  onClick={() =>
+                  onClick={() => // Sự kiện ấn vào nút
                     handleSignIn(
                       formData,
                       setLoading,

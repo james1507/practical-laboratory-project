@@ -31,7 +31,7 @@ const RegisterPracticeRoom = () => {
     "Đây là trang đăng ký thông tin phòng thực hành, hãy điền thông tin";
   const imageName = "pratice_room.png";
 
-  const idMatchSchedule = uuidv4();
+  const idMatchSchedule = uuidv4(); // mục đích của nó tạo ra 
 
   const [practiceRooms, setPracticeRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState("");

@@ -158,7 +158,10 @@ const UpdatePracticeRoom = () => {
 
     // Send a POST request to your API
     axios
-      .post("http://localhost:8000/api/practice-room-details", formData)
+      .put(
+        `http://localhost:8000/api/practice-room-details/by-matches/${idMatchSchedule}`,
+        formData
+      )
       .then((response) => {
         // If the request is successful, set the success message
         setSuccessMessage("Data created successfully!");
@@ -172,7 +175,10 @@ const UpdatePracticeRoom = () => {
       });
 
     axios
-      .post("http://localhost:8000/api/schedules", formData1)
+      .put(
+        `http://localhost:8000/api/update-by-id-match-schedule/${idMatchSchedule}`,
+        formData1
+      )
       .then((response) => {
         // If the request is successful, set the success message
         // setSuccessMessage("Data created successfully!");
@@ -203,7 +209,6 @@ const UpdatePracticeRoom = () => {
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
-                  
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">Cập nhật phòng thực hành</h3>

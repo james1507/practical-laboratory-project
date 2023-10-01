@@ -25,7 +25,7 @@ module.exports = function (app) {
 
   app.put("/api/auth/update-profile/:userId", controller.updateProfileById);
 
-  app.post("/api/auth/signin", controller.signin);
+  app.post("/api/auth/signin", controller.signin); // gọi tới đúng logic
 
   app.get(
     "/api/accounts",
