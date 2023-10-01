@@ -2,12 +2,16 @@ import Index from "views/Home/Index.js";
 import Profile from "views/Profile/Profile.js";
 import Register from "views/Register/Register.js";
 import Login from "views/Login/Login.js";
-import RegisterPracticeRoom from "views/RegisterPraticeRoom/RegisterPracticeRoom";
+import RegisterPracticeRoom from "views/RegisterPraticeRoomDetails/RegisterPracticeRoom";
 import RegisterBorrowEquipment from "views/RegisterBorrowEquipment/RegisterBorrowEquipment";
 import ListPracticeRoom from "views/ListPracticeRoom/ListPracticeRoom";
 import ListAllUser from "views/ListAllUser/ListAllUser";
 import UpdatePracticeRoom from "views/UpdatePracticeRoom/UpdatePracticeRoom";
 import ListAllEquipment from "views/RegisterBorrowEquipment/ListAllEquipment";
+import ListAllPracticeRoom from "views/RegisterPracticeRoom/ListAllPracticeRoom";
+import RegisterPracticeRoomLearn from "views/RegisterPracticeRoom/RegisterPracticeRoom";
+import ListAllSubjects from "views/RegisterSubjects/ListAllSubjects";
+import RegisterSubjects from "views/RegisterSubjects/RegisterSubjects";
 
 var routes = [
   {
@@ -57,7 +61,24 @@ var routes = [
     icon: "ni ni-settings text-green",
     component: <ListAllEquipment />,
     layout: "/admin",
-    isAdminOrModerator: true,
+  },
+  {
+    path: "/user-practice-room-learn",
+    name: "Quản lý phòng thực hành",
+    icon: "ni ni-settings text-green",
+    component: <ListAllPracticeRoom />,
+    layout: "/admin",
+    isAdminOrModerator: false,
+    isAdmin: false,
+  },
+  {
+    path: "/user-subjects",
+    name: "Quản lý môn học",
+    icon: "ni ni-settings text-green",
+    component: <ListAllSubjects />,
+    layout: "/admin",
+    isAdminOrModerator: false,
+    isAdmin: false,
   },
   // {
   //   path: "/tables",
@@ -100,6 +121,22 @@ var routes = [
     name: "Tạo thiết bị mới",
     icon: "ni ni-settings text-green",
     component: <RegisterBorrowEquipment />,
+    layout: "/admin",
+    isHide: true,
+  },
+  {
+    path: "/create-practice-room-learn",
+    name: "Tạo phòng thực hành mới",
+    icon: "ni ni-settings text-green",
+    component: <RegisterPracticeRoomLearn />,
+    layout: "/admin",
+    isHide: true,
+  },
+  {
+    path: "/create-subjects",
+    name: "Tạo môn học mới",
+    icon: "ni ni-settings text-green",
+    component: <RegisterSubjects />,
     layout: "/admin",
     isHide: true,
   },

@@ -16,35 +16,20 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const ListAllEquipment = () => {
+const ListAllPracticeRoom = () => {
   const [equipmentInfos, setEquipmentInfos] = useState([]);
   const username = useSelector((state) => state.auth.username);
-  const roles = useSelector((state) => state.auth.roles);
-  const userId = useSelector((state) => state.auth.id); // goi tu kho du lieu ra
 
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
     // Navigate to the desired route when Đăng ký button is clicked
-    navigate(`/admin/create-equipment`);
+    navigate(`/admin/create-practice-room-learn`);
   };
-
-  const hasRequiredRole = roles.some(
-    // check xem day co phai la nguoi truc hay la admin khong ?
-    (role) => role === "ROLE_MODERATOR" || role === "ROLE_ADMIN"
-  );
-
-  var url = "";
-
-  if (hasRequiredRole) {
-    url = "http://localhost:8000/api/equipments";
-  } else {
-    url = `http://localhost:8000/api/equipment/by-user/${username}`;
-  }
 
   useEffect(() => {
     // Fetch data from the API
-    fetch(url)
+    fetch(`http://localhost:8000/api/practice-rooms`)
       .then((response) => response.json())
       .then((data) => setEquipmentInfos(data))
       .catch((error) => console.error("Error fetching data:", error));
@@ -60,7 +45,7 @@ const ListAllEquipment = () => {
               <div className="d-flex justify-content-between">
                 {/* Move the CardHeader to the left */}
                 <CardHeader className="border-0">
-                  <h3 className="mb-0">Danh sách thiết bị</h3>
+                  <h3 className="mb-0">Danh sách phòng thực hành đăng ký</h3>
                 </CardHeader>
                 {/* Add the "Cập nhật" button on the right */}
                 <div className="text-right">
@@ -77,8 +62,7 @@ const ListAllEquipment = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Tên Thiết bị</th>
-                    <th scope="col">Người mượn</th>
+                    <th scope="col">Tên phòng</th>
                     <th scope="col">Mô tá</th>
                     <th scope="col" />
                   </tr>
@@ -86,9 +70,8 @@ const ListAllEquipment = () => {
                 <tbody>
                   {equipmentInfos.map((detail) => (
                     <tr key={detail._id}>
-                      <td>{detail.EquipmentName}</td>
-                      <td>{detail.IdUser}</td>
-                      <td>{detail.EquipmentDescription}</td>
+                      <td>{detail.Name}</td>
+                      <td>{detail.Description}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -122,4 +105,4 @@ const ListAllEquipment = () => {
   );
 };
 
-export default ListAllEquipment;
+export default ListAllPracticeRoom;
